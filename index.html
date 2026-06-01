@@ -1,357 +1,428 @@
 
+<link href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --pink:#D4537E;--pink-light:#FBEAF0;--pink-mid:#F4C0D1;--pink-dark:#72243E;
-  --teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#9FE1CB;--teal-dark:#085041;
-  --purple:#7F77DD;--purple-light:#EEEDFE;--purple-mid:#CECBF6;--purple-dark:#3C3489;
-  --amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#FAC775;--amber-dark:#633806;
-  --blue:#378ADD;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--blue-dark:#0C447C;
-  --green:#639922;--green-light:#EAF3DE;--green-mid:#C0DD97;--green-dark:#27500A;
-}
-.wrap{padding:1.5rem 0 3rem;font-family:var(--font-sans)}
-.hero{border:0.5px solid var(--color-border-tertiary);border-radius:16px;padding:20px 22px;margin-bottom:16px;display:flex;align-items:center;gap:20px}
-.hero-left{flex:1}
-.hero-eyebrow{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
-.hero-title{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
-.hero-sub{font-size:12px;color:var(--color-text-secondary)}
-.hero-right{text-align:center}
-.cd-ring{width:96px;height:96px;border-radius:50%;border:3px solid var(--color-border-tertiary);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
-.cd-ring svg{position:absolute;top:0;left:0;width:96px;height:96px;transform:rotate(-90deg)}
-.cd-ring circle{fill:none;stroke-width:3}
-.cd-ring .track{stroke:var(--color-border-tertiary)}
-.cd-ring .arc{stroke:#D4537E;stroke-linecap:round;transition:stroke-dashoffset .5s}
-.cd-d{font-size:22px;font-weight:500;color:var(--color-text-primary);line-height:1;position:relative;z-index:1}
-.cd-lbl{font-size:10px;color:var(--color-text-tertiary);position:relative;z-index:1}
-.cd-hm{display:flex;gap:6px;margin-top:6px;justify-content:center}
-.cd-chip{background:var(--color-background-secondary);border-radius:6px;padding:3px 8px;text-align:center;min-width:36px}
-.cd-chip-n{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1}
-.cd-chip-l{font-size:10px;color:var(--color-text-tertiary)}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.stat-card{border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:11px 13px;background:var(--color-background-primary)}
-.stat-l{font-size:11px;color:var(--color-text-tertiary);margin-bottom:5px}
-.stat-v{font-size:20px;font-weight:500;color:var(--color-text-primary);line-height:1}
-.overall-bar{border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:14px 16px;margin-bottom:16px;background:var(--color-background-primary)}
-.ob-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.ob-label{font-size:12px;color:var(--color-text-secondary)}
-.ob-pct{font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.ob-track{height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
-.ob-fill{height:100%;border-radius:3px;background:#D4537E;transition:width .35s}
-.ob-cats{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.ob-cat-pill{display:flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:20px;border:0.5px solid var(--color-border-tertiary)}
-
-.sections{}
-.sec-card{border:0.5px solid var(--color-border-tertiary);border-radius:12px;margin-bottom:10px;background:var(--color-background-primary);overflow:hidden}
-.sec-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none;transition:background .15s}
-.sec-head:hover{background:var(--color-background-secondary)}
-.sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sec-name{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
-.sec-bar-wrap{width:80px;height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
-.sec-bar-fill{height:100%;border-radius:2px;transition:width .3s}
-.sec-frac{font-size:11px;color:var(--color-text-tertiary);min-width:28px;text-align:right}
-.sec-chev{font-size:15px;color:var(--color-text-tertiary);transition:transform .2s}
-.sec-chev.open{transform:rotate(90deg)}
-.sec-body{border-top:0.5px solid var(--color-border-tertiary)}
-.task-row{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:0.5px solid var(--color-border-tertiary);transition:background .12s}
-.task-row:last-of-type{border-bottom:none}
-.task-row:hover{background:var(--color-background-secondary)}
-.task-row:hover .t-actions{opacity:1}
-.t-check{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--color-border-secondary);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.t-check.done{border-color:#D4537E;background:#D4537E}
-.t-check.done::after{content:'';display:block;width:5px;height:9px;border:2px solid white;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px)}
-.t-text{font-size:13px;color:var(--color-text-primary);flex:1;line-height:1.4}
-.t-text.done{color:var(--color-text-tertiary);text-decoration:line-through}
-.t-date-pill{font-size:10px;padding:2px 7px;border-radius:20px;white-space:nowrap;font-weight:400}
-.t-actions{opacity:0;display:flex;gap:2px;transition:opacity .15s}
-.t-btn{background:none;border:none;cursor:pointer;font-size:14px;color:var(--color-text-tertiary);padding:3px 4px;border-radius:4px;line-height:1}
-.t-btn:hover{color:var(--color-text-primary);background:var(--color-border-tertiary)}
-.add-row{display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:0.5px solid var(--color-border-tertiary)}
-.add-inp{flex:1;border:none;background:transparent;font-size:13px;color:var(--color-text-primary);outline:none;font-family:var(--font-sans)}
-.add-inp::placeholder{color:var(--color-text-tertiary)}
-.add-date{font-size:11px;border:0.5px solid var(--color-border-tertiary);border-radius:5px;padding:3px 6px;color:var(--color-text-secondary);background:var(--color-background-primary);font-family:var(--font-sans);cursor:pointer;outline:none}
-.add-go{font-size:11px;padding:3px 10px;border:0.5px solid var(--color-border-secondary);border-radius:5px;cursor:pointer;background:transparent;color:var(--color-text-secondary);font-family:var(--font-sans);transition:background .12s}
-.add-go:hover{background:var(--color-background-secondary)}
-
-.edit-wrap{border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--color-background-primary);display:none}
-.edit-wrap.show{display:block}
-.edit-field{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.edit-field label{font-size:12px;color:var(--color-text-tertiary);min-width:32px}
-.edit-field input,.edit-field select{flex:1;padding:6px 9px;border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none}
-.edit-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
-.btn-save{padding:5px 16px;background:#D4537E;color:white;border:none;border-radius:7px;font-size:13px;cursor:pointer;font-family:var(--font-sans)}
-.btn-cancel{padding:5px 14px;background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;cursor:pointer;font-family:var(--font-sans)}
+html,body{font-family:'Klee One',cursive;background:transparent}
+.page{padding:1rem 0 3rem}
+.top-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.page-title{font-size:24px;font-weight:400;color:var(--color-text-primary)}
+.page-meta{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.tz-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-tertiary);margin-top:4px}
+.cd-block{text-align:right}
+.cd-row{display:flex;align-items:center;gap:10px;justify-content:flex-end}
+.cd-icon{width:48px;height:48px;flex-shrink:0}
+.cd-nums{font-size:26px;font-weight:400;color:var(--color-text-primary);line-height:1;letter-spacing:.5px}
+.cd-accent{color:#b85c3a}
+.cd-sub{font-size:11px;color:var(--color-text-secondary);margin-top:3px;text-align:right}
+.ov-strip{border-radius:8px;padding:9px 13px;margin-bottom:18px;background:var(--color-background-secondary);display:flex;align-items:center;gap:12px}
+.ov-label{font-size:13px;color:var(--color-text-secondary);white-space:nowrap}
+.ov-track{flex:1;height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.ov-fill{height:100%;border-radius:3px;background:#b85c3a;transition:width .4s}
+.ov-pct{font-size:13px;color:var(--color-text-primary);min-width:34px;text-align:right}
+.sticky-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px;align-items:start}
+.sticky{position:relative;padding:14px 13px 32px;min-height:190px;display:flex;flex-direction:column;filter:drop-shadow(1px 2px 3px rgba(0,0,0,.16)) drop-shadow(3px 5px 10px rgba(0,0,0,.09))}
+.tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1.5deg);width:46px;height:17px;z-index:10;background:rgba(255,255,255,.52);border:0.5px solid rgba(200,190,160,.5);border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.10)}
+.texture-overlay{position:absolute;inset:0;pointer-events:none;z-index:0;border-radius:inherit;opacity:.5;background-image:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(0,0,0,.022) 23px)}
+.curl-svg{position:absolute;bottom:0;right:0;z-index:5;pointer-events:none}
+.sticky-inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column}
+.sticky-header{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-bottom:7px;border-bottom:1.5px dashed rgba(0,0,0,.13)}
+.sticky-title{font-size:15px;font-weight:400;color:inherit;font-family:'Klee One',cursive;background:transparent;border:none;outline:none;flex:1;min-width:0;cursor:text;padding:0;line-height:1.3}
+.sticky-title:focus{border-bottom:1px dashed rgba(0,0,0,.25)}
+.sticky-frac{font-size:11px;opacity:.55;white-space:nowrap}
+.mini-bar{height:2.5px;border-radius:2px;background:rgba(0,0,0,.1);margin-bottom:9px;overflow:hidden}
+.mini-fill{height:100%;border-radius:2px;background:rgba(0,0,0,.22);transition:width .35s}
+.task-list{flex:1;display:flex;flex-direction:column;gap:5px}
+.task-item{display:flex;align-items:flex-start;gap:7px;padding:2px 3px;border-radius:3px;transition:background .12s}
+.task-item:hover{background:rgba(0,0,0,.06)}
+.task-item:hover .ti-acts{opacity:1}
+.ti-chk{flex-shrink:0;margin-top:2px;cursor:pointer;line-height:0;display:block}
+.ti-right{flex:1;min-width:0}
+.ti-lbl{font-size:13px;color:inherit;line-height:1.35;font-family:'Klee One',cursive;display:block;position:relative}
+.ti-lbl::after{content:'';position:absolute;left:0;top:50%;height:1px;background:currentColor;width:0;transition:width .5s ease;opacity:.55}
+.ti-lbl.done{opacity:.4}
+.ti-lbl.done::after{width:100%}
+.ti-dt{font-size:10px;opacity:.45;display:block;margin-top:1px}
+.ti-acts{opacity:0;display:flex;gap:1px;flex-shrink:0;transition:opacity .15s}
+.ti-btn{background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:3px;line-height:0;display:flex;align-items:center;justify-content:center}
+.ti-btn:hover{background:rgba(0,0,0,.1)}
+.add-row{display:flex;align-items:center;gap:5px;margin-top:8px;padding-top:7px;border-top:1px dashed rgba(0,0,0,.12)}
+.add-inp{flex:1;border:none;background:transparent;font-size:13px;outline:none;color:inherit;font-family:'Klee One',cursive;min-width:0}
+.add-inp::placeholder{opacity:.35}
+.add-dt{font-size:10px;border:none;border-bottom:1px solid rgba(0,0,0,.15);background:transparent;color:inherit;font-family:'Klee One',cursive;outline:none;width:78px}
+.add-go{font-size:14px;border:1px solid rgba(0,0,0,.16);border-radius:4px;background:transparent;cursor:pointer;padding:1px 7px;color:inherit;font-family:'Klee One',cursive;line-height:1.5;flex-shrink:0}
+.edit-ov{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:15px;margin-bottom:14px;display:none}
+.edit-ov.show{display:block}
+.ef{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.ef label{font-size:13px;color:var(--color-text-secondary);min-width:32px}
+.ef input{flex:1;padding:5px 8px;border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:'Klee One',cursive;outline:none}
+.ebtns{display:flex;gap:8px;justify-content:flex-end}
+.ebtn-s{padding:5px 15px;background:#b85c3a;color:white;border:none;border-radius:7px;font-size:13px;cursor:pointer;font-family:'Klee One',cursive}
+.ebtn-c{padding:5px 13px;background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;cursor:pointer;font-family:'Klee One',cursive}
 </style>
 
-<div class="wrap">
-<h2 class="sr-only">六月日本行程计划 — 交互任务清单含倒计时与进度追踪</h2>
-
-<div class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Jun 2026 · Japan Trip</div>
-    <div class="hero-title">六月日本行程计划</div>
-    <div class="hero-sub">6月26日 01:30 起飞 &nbsp;·&nbsp; 点击勾选 &nbsp;·&nbsp; 悬停编辑</div>
+<div class="page">
+<div class="top-bar">
+  <div>
+    <div class="page-title">六月日本行程 ✈</div>
+    <div class="page-meta">6月26日 01:30 起飞 · 点击勾选 · 单击标题改名</div>
+    <div class="tz-badge" id="tz-badge">时区检测中…</div>
   </div>
-  <div class="hero-right">
-    <div class="cd-ring">
-      <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-        <circle class="track" cx="48" cy="48" r="44"/>
-        <circle class="arc" id="cd-arc" cx="48" cy="48" r="44" stroke-dasharray="276.5" stroke-dashoffset="0"/>
-      </svg>
-      <div class="cd-d" id="cd-d">--</div>
-      <div class="cd-lbl">天</div>
+  <div class="cd-block">
+    <div class="cd-row">
+      <div class="cd-icon" id="cd-icon"></div>
+      <div class="cd-nums">
+        <span class="cd-accent" id="cd-d">--</span><span style="font-size:15px;opacity:.6"> 天 </span><span class="cd-accent" id="cd-h">--</span><span style="opacity:.4">:</span><span class="cd-accent" id="cd-m">--</span><span style="opacity:.4">:</span><span class="cd-accent" id="cd-s">--</span>
+      </div>
     </div>
-    <div class="cd-hm">
-      <div class="cd-chip"><div class="cd-chip-n" id="cd-h">--</div><div class="cd-chip-l">时</div></div>
-      <div class="cd-chip"><div class="cd-chip-n" id="cd-m">--</div><div class="cd-chip-l">分</div></div>
-    </div>
+    <div class="cd-sub">距起飞倒计时（每秒更新）</div>
   </div>
 </div>
-
-<div class="stats-row">
-  <div class="stat-card"><div class="stat-l">全部任务</div><div class="stat-v" id="s-total">—</div></div>
-  <div class="stat-card"><div class="stat-l">已完成</div><div class="stat-v" style="color:#D4537E" id="s-done">—</div></div>
-  <div class="stat-card"><div class="stat-l">待完成</div><div class="stat-v" id="s-todo">—</div></div>
-  <div class="stat-card"><div class="stat-l">完成率</div><div class="stat-v" id="s-pct">—</div></div>
+<div class="ov-strip">
+  <span class="ov-label">整体进度</span>
+  <div class="ov-track"><div class="ov-fill" id="ov-fill" style="width:0%"></div></div>
+  <span class="ov-pct" id="ov-pct">0%</span>
 </div>
-
-<div class="overall-bar">
-  <div class="ob-head">
-    <span class="ob-label">整体进度</span>
-    <span class="ob-pct" id="ob-pct">0%</span>
-  </div>
-  <div class="ob-track"><div class="ob-fill" id="ob-fill" style="width:0%"></div></div>
-  <div class="ob-cats" id="ob-cats"></div>
-</div>
-
-<div id="edit-wrap" class="edit-wrap">
-  <div class="edit-field"><label>任务</label><input id="e-text" type="text" placeholder="任务名称"></div>
-  <div class="edit-field"><label>日期</label><input id="e-date" type="date"></div>
-  <div class="edit-field"><label>分类</label>
-    <select id="e-cat">
-      <option value="visa">签证 / 证件</option>
-      <option value="grad">毕业相关</option>
-      <option value="money">财务 / 取现</option>
-      <option value="pack">打包 / 行李</option>
-      <option value="beauty">美甲 / 美容</option>
-      <option value="fly">出发</option>
-    </select>
-  </div>
-  <div class="edit-btns">
-    <button class="btn-cancel" onclick="closeEdit()">取消</button>
-    <button class="btn-save" onclick="saveEdit()">保存</button>
+<div id="edit-ov" class="edit-ov">
+  <div class="ef"><label>任务</label><input id="e-text" type="text"></div>
+  <div class="ef"><label>日期</label><input id="e-date" type="date"></div>
+  <div class="ebtns">
+    <button class="ebtn-c" onclick="closeEdit()">取消</button>
+    <button class="ebtn-s" onclick="saveEdit()">保存</button>
   </div>
 </div>
-
-<div id="sections-root" class="sections"></div>
+<div class="sticky-grid" id="sticky-grid"></div>
 </div>
 
 <script>
-const CATS={
-  visa:  {label:'签证 / 证件',icon:'ti-shield-check',color:'#D4537E',   bg:'#FBEAF0',txt:'#72243E'},
-  grad:  {label:'毕业相关',   icon:'ti-school',      color:'#7F77DD',   bg:'#EEEDFE',txt:'#3C3489'},
-  money: {label:'财务 / 取现',icon:'ti-coin',        color:'#BA7517',   bg:'#FAEEDA',txt:'#633806'},
-  pack:  {label:'打包 / 行李',icon:'ti-luggage',     color:'#1D9E75',   bg:'#E1F5EE',txt:'#085041'},
-  beauty:{label:'美甲 / 美容',icon:'ti-nail',        color:'#D4537E',   bg:'#FBEAF0',txt:'#72243E'},
-  fly:   {label:'出发',       icon:'ti-plane',       color:'#378ADD',   bg:'#E6F1FB',txt:'#0C447C'},
-};
+const PALS=[
+  {bg:'#FEF8C0',color:'#4A3800',curl1:'#E8DA90',curl2:'#C8B860'},
+  {bg:'#FCE4EC',color:'#5A1828',curl1:'#EDCADA',curl2:'#C898AE'},
+  {bg:'#E9F5EA',color:'#183820',curl1:'#C8E8CA',curl2:'#90C095'},
+  {bg:'#E4F0FD',color:'#0A2848',curl1:'#C0D8F5',curl2:'#88B0DC'},
+  {bg:'#F3E5F5',color:'#381048',curl1:'#E0C8EC',curl2:'#B090C4'},
+  {bg:'#FFF0DE',color:'#402808',curl1:'#EED8B0',curl2:'#C8A878'},
+];
+
+// icon state: 'packing0'..'packing4', 'walking', 'flying'
+// packing progress = how many of the two 行李 tasks are done
+// walking = both 行李 tasks done
+// flying = 起飞 task done
 
 let data=[
-  {id:'s1',cat:'visa',  label:'签证 / 证件',open:true,tasks:[
-    {id:'t1', text:'旅行社提交材料',              date:'2026-06-01',done:true},
-    {id:'t2', text:'收到证件材料 ok 反馈',        date:'2026-06-02',done:false},
-    {id:'t3', text:'签证正式开始办理（约8工作日）',date:'2026-06-02',done:false},
-    {id:'t4', text:'确认收到签证',                date:'2026-06-13',done:false},
+  {id:'s1',label:'签证 / 证件',pal:0,tasks:[
+    {id:'t1',text:'旅行社提交材料',           date:'2026-06-01',done:true},
+    {id:'t2',text:'收到证件材料 ok 反馈',     date:'2026-06-02',done:false},
+    {id:'t3',text:'签证正式办理（约8工作日）', date:'2026-06-02',done:false},
+    {id:'t4',text:'确认收到签证',             date:'2026-06-13',done:false},
   ]},
-  {id:'s2',cat:'grad',  label:'毕业相关',open:true,tasks:[
-    {id:'t5', text:'毕业答辩',date:'2026-06-12',done:false},
-    {id:'t6', text:'拍毕业照',date:'2026-06-12',done:false},
+  {id:'s2',label:'毕业相关',pal:1,tasks:[
+    {id:'t5',text:'毕业答辩',date:'2026-06-12',done:false},
+    {id:'t6',text:'拍毕业照',date:'2026-06-12',done:false},
   ]},
-  {id:'s3',cat:'money', label:'财务 / 取现',open:true,tasks:[
-    {id:'t7', text:'预约取现（提前1周）',date:'2026-06-08',done:false},
-    {id:'t8', text:'购汇',              date:'2026-06-09',done:false},
-    {id:'t9', text:'银行取现日元',      date:'2026-06-15',done:false},
+  {id:'s3',label:'财务 / 取现',pal:5,tasks:[
+    {id:'t7',text:'预约取现（提前1周）',date:'2026-06-08',done:false},
+    {id:'t8',text:'购汇',              date:'2026-06-09',done:false},
+    {id:'t9',text:'银行取现日元',      date:'2026-06-15',done:false},
   ]},
-  {id:'s4',cat:'pack',  label:'打包 / 行李',open:true,tasks:[
-    {id:'t10',text:'收拾部分行李',           date:'2026-06-20',done:false},
-    {id:'t11',text:'寄回不需要的行李',       date:'2026-06-22',done:false},
-    {id:'t12',text:'收拾旅行行李（Day 1）',  date:'2026-06-24',done:false},
-    {id:'t13',text:'收拾旅行行李（Day 2）',  date:'2026-06-25',done:false},
+  {id:'s4',label:'打包 / 行李',pal:2,tasks:[
+    {id:'t10',text:'收拾部分行李',         date:'2026-06-20',done:false},
+    {id:'t11',text:'寄回不需要的行李',     date:'2026-06-22',done:false},
+    {id:'t12',text:'收拾旅行行李 Day 1',   date:'2026-06-24',done:false},
+    {id:'t13',text:'收拾旅行行李 Day 2',   date:'2026-06-25',done:false},
   ]},
-  {id:'s5',cat:'beauty',label:'美甲 / 美容',open:true,tasks:[
+  {id:'s5',label:'美甲 / 美容',pal:4,tasks:[
     {id:'t14',text:'卸甲',date:'2026-06-21',done:false},
     {id:'t15',text:'美甲',date:'2026-06-25',done:false},
   ]},
-  {id:'s6',cat:'fly',   label:'出发',open:true,tasks:[
-    {id:'t16',text:'出发前吃饭（18:00–19:00）',date:'2026-06-25',done:false},
-    {id:'t17',text:'前往机场',                 date:'2026-06-25',done:false},
-    {id:'t18',text:'起飞 01:30',               date:'2026-06-26',done:false},
+  {id:'s6',label:'出发',pal:3,tasks:[
+    {id:'t16',text:'出发前吃饭 18:00–19:00',date:'2026-06-25',done:false},
+    {id:'t17',text:'前往机场',              date:'2026-06-25',done:false},
+    {id:'t18',text:'起飞 01:30',            date:'2026-06-26',done:false},
   ]},
 ];
 
+// IDs that control icon state
+const PACK_TASK_IDS=['t10','t11','t12','t13'];
+const FLY_TASK_ID='t18';
+
 let editTarget=null;
 function uid(){return 't'+Date.now()+Math.random().toString(36).slice(2,5)}
-function fmtDate(d){if(!d)return'';const dt=new Date(d+'T00:00:00');return(dt.getMonth()+1)+'月'+dt.getDate()+'日'}
+function fmtDate(d){if(!d)return'';const dt=new Date(d+'T00:00:00');return(dt.getMonth()+1)+'/'+(dt.getDate())}
 
-function calcStats(){
-  let total=0,done=0;
-  data.forEach(s=>s.tasks.forEach(t=>{total++;if(t.done)done++;}));
-  return{total,done,todo:total-done,pct:total?Math.round(done/total*100):0};
+function getIconState(){
+  // check fly first
+  let flyDone=false;
+  data.forEach(s=>s.tasks.forEach(t=>{if(t.id===FLY_TASK_ID&&t.done)flyDone=true}));
+  if(flyDone)return'flying';
+  let packDone=0;
+  data.forEach(s=>s.tasks.forEach(t=>{if(PACK_TASK_IDS.includes(t.id)&&t.done)packDone++}));
+  if(packDone>=4)return'walking';
+  return'packing:'+packDone; // 0,1,2,3
 }
 
-function updateStats(){
-  const{total,done,todo,pct}=calcStats();
-  document.getElementById('s-total').textContent=total;
-  document.getElementById('s-done').textContent=done;
-  document.getElementById('s-todo').textContent=todo;
-  document.getElementById('s-pct').textContent=pct+'%';
-  document.getElementById('ob-fill').style.width=pct+'%';
-  document.getElementById('ob-pct').textContent=pct+'%';
+// ── ICON SVGs ──
 
-  const cats=document.getElementById('ob-cats');
-  cats.innerHTML='';
-  data.forEach(s=>{
-    const c=CATS[s.cat];const d2=s.tasks.filter(t=>t.done).length;
-    const el=document.createElement('div');
-    el.className='ob-cat-pill';
-    el.style.background=c.bg;el.style.borderColor=c.color+'44';
-    el.innerHTML=`<i class="ti ${c.icon}" style="font-size:12px;color:${c.color}" aria-hidden="true"></i><span style="color:${c.txt}">${d2}/${s.tasks.length}</span>`;
-    cats.appendChild(el);
-  });
-
-  const totalDays=25;
-  const flight=new Date('2026-06-26T01:30:00');
-  const start=new Date('2026-06-01T00:00:00');
-  const now=new Date();
-  const elapsed=(now-start)/(flight-start);
-  const circ=2*Math.PI*44;
-  const offset=circ*(1-Math.max(0,Math.min(1,elapsed)));
-  const arc=document.getElementById('cd-arc');
-  if(arc)arc.style.strokeDashoffset=offset.toFixed(1);
+function packingSVG(filled){
+  // filled = 0..3, items inside open suitcase
+  const items=[
+    {x:16,y:20,w:6,h:4,c:'#e8a060'},
+    {x:24,y:19,w:5,h:3,c:'#7db8e0'},
+    {x:14,y:24,w:8,h:3,c:'#d4a0c0'},
+  ];
+  let itemsSVG='';
+  for(let i=0;i<Math.min(filled,items.length);i++){
+    const it=items[i];
+    itemsSVG+=`<rect x="${it.x}" y="${it.y}" width="${it.w}" height="${it.h}" rx="1" fill="${it.c}" opacity=".9"/>`;
+  }
+  // arm animation based on fill
+  const armAnim=filled<4?`<animateTransform attributeName="transform" type="rotate" values="-25 18 18;20 18 18;-25 18 18" dur="1.2s" repeatCount="indefinite"/>`:'';
+  return`<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+    <!-- person -->
+    <circle cx="10" cy="8" r="4" fill="#b85c3a"/>
+    <rect x="6" y="13" width="8" height="10" rx="2" fill="#b85c3a"/>
+    <!-- arm -->
+    <g transform="rotate(0 18 18)"><line x1="14" y1="15" x2="20" y2="22" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round">${armAnim}</line></g>
+    <!-- static arm -->
+    <line x1="6" y1="16" x2="2" y2="22" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
+    <!-- legs -->
+    <line x1="9" y1="23" x2="7" y2="35" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="13" y1="23" x2="15" y2="35" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
+    <!-- open suitcase body -->
+    <rect x="13" y="16" width="26" height="20" rx="2" fill="none" stroke="#b85c3a" stroke-width="1.4"/>
+    <!-- suitcase lid open (hinge top) -->
+    <path d="M13 16 Q26 8 39 16" fill="none" stroke="#b85c3a" stroke-width="1.4"/>
+    <!-- items inside -->
+    ${itemsSVG}
+    <!-- handle -->
+    <rect x="20" y="13.5" width="9" height="3" rx="1.2" fill="none" stroke="#b85c3a" stroke-width="1.2"/>
+  </svg>`;
 }
 
-function renderAll(){
-  const root=document.getElementById('sections-root');
-  root.innerHTML='';
+function walkingSVG(){
+  return`<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+    <style>
+      .wl1{transform-origin:17px 28px;animation:wla 0.65s ease-in-out infinite alternate}
+      .wl2{transform-origin:21px 28px;animation:wlb 0.65s ease-in-out infinite alternate}
+      .wb{animation:wbob 0.65s ease-in-out infinite alternate}
+      @keyframes wla{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+      @keyframes wlb{from{transform:rotate(16deg)}to{transform:rotate(-16deg)}}
+      @keyframes wbob{from{transform:translateY(0)}to{transform:translateY(-1.5px)}}
+    </style>
+    <g class="wb">
+      <circle cx="14" cy="7" r="4" fill="#b85c3a"/>
+      <rect x="9" y="12" width="10" height="11" rx="2" fill="#b85c3a"/>
+      <line x1="19" y1="15" x2="26" y2="19" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="9" y1="15" x2="4" y2="21" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+    <g class="wl1"><line x1="12" y1="23" x2="9" y2="36" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/></g>
+    <g class="wl2"><line x1="17" y1="23" x2="20" y2="36" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/></g>
+    <!-- suitcase closed -->
+    <rect x="24" y="20" width="16" height="12" rx="2" fill="#e8a060" stroke="#b85c3a" stroke-width="1.2"/>
+    <line x1="32" y1="20" x2="32" y2="32" stroke="#b85c3a" stroke-width=".8"/>
+    <line x1="24" y1="26" x2="40" y2="26" stroke="#b85c3a" stroke-width=".8"/>
+    <rect x="29" y="18" width="6" height="3" rx="1" fill="#b85c3a"/>
+    <circle cx="27" cy="33" r="1.8" fill="#b85c3a"/>
+    <circle cx="37" cy="33" r="1.8" fill="#b85c3a"/>
+    <line x1="26" y1="18.5" x2="26" y2="20" stroke="#b85c3a" stroke-width="1.4" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function flyingSVG(){
+  return`<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+    <style>
+      .plane{animation:flyup 1.8s ease-in-out infinite}
+      .trail1{animation:fade1 1.8s ease-in-out infinite}
+      .trail2{animation:fade2 1.8s ease-in-out infinite}
+      @keyframes flyup{0%{transform:translate(0,4px)}50%{transform:translate(3px,-3px)}100%{transform:translate(0,4px)}}
+      @keyframes fade1{0%,100%{opacity:.15}50%{opacity:.55}}
+      @keyframes fade2{0%,100%{opacity:.08}40%{opacity:.35}}
+    </style>
+    <g class="trail2"><path d="M4 36 Q12 30 18 28" stroke="#b85c3a" stroke-width="1.2" fill="none" stroke-dasharray="2 2"/></g>
+    <g class="trail1"><path d="M8 38 Q16 33 22 30" stroke="#b85c3a" stroke-width="1" fill="none" stroke-dasharray="2 3"/></g>
+    <g class="plane">
+      <path d="M10 28 L30 14 L34 18 L20 26 L22 34 L16 30 Z" fill="#b85c3a"/>
+      <path d="M22 20 L36 16 L34 20 Z" fill="#b85c3a" opacity=".7"/>
+      <circle cx="26" cy="18" r="1.5" fill="white" opacity=".8"/>
+    </g>
+  </svg>`;
+}
+
+function updateIcon(){
+  const state=getIconState();
+  const el=document.getElementById('cd-icon');
+  if(state==='flying'){el.innerHTML=flyingSVG();return}
+  if(state==='walking'){el.innerHTML=walkingSVG();return}
+  const filled=parseInt(state.split(':')[1])||0;
+  el.innerHTML=packingSVG(filled);
+}
+
+function checkSVG(done,color){
+  if(done)return`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="13" height="13" rx="3" fill="${color}" stroke="${color}" stroke-width="1"/><polyline points="4,8 7,11 12,5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  return`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="13" height="13" rx="3" stroke="${color}" stroke-width="1.2" stroke-dasharray="2.5 1.5" opacity=".5"/></svg>`;
+}
+function editSVG(c){return`<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 2 L11 4 L4 11 L1.5 11.5 L2 9 Z" stroke="${c}" stroke-width="1.2" stroke-linejoin="round"/><path d="M7.5 3.5 L9.5 5.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/></svg>`}
+function delSVG(c){return`<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 3.5 L10.5 3.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><path d="M5 3.5 V2.5 H8 V3.5" stroke="${c}" stroke-width="1.1" stroke-linejoin="round"/><path d="M3.5 3.5 L4 11 H9 L9.5 3.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+
+function curlEl(p){
+  const s=32;
+  const el=document.createElement('div');
+  el.className='curl-svg';
+  el.style.cssText=`position:absolute;bottom:0;right:0;z-index:5;pointer-events:none;width:${s}px;height:${s}px`;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox',`0 0 ${s} ${s}`);
+  svg.setAttribute('width',s);svg.setAttribute('height',s);
+  svg.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  svg.innerHTML=`
+    <defs><linearGradient id="cg${p.pal}" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${p.curl1}"/><stop offset="100%" stop-color="${p.curl2}"/></linearGradient></defs>
+    <path d="M0 ${s} L${s} ${s} L${s} 0 Q${s} ${s} 0 ${s} Z" fill="${p.curl1}"/>
+    <path d="M${s*.08} ${s} Q${s*.58} ${s*.82} ${s} ${s*.08} L${s} ${s} Z" fill="${p.curl2}" opacity=".75"/>
+    <path d="M${s*.12} ${s} Q${s*.6} ${s*.8} ${s} ${s*.12}" stroke="rgba(0,0,0,.13)" stroke-width="1" fill="none"/>`;
+  el.appendChild(svg);
+  return el;
+}
+
+function updateOverall(){
+  let tot=0,don=0;
+  data.forEach(s=>s.tasks.forEach(t=>{tot++;if(t.done)don++;}));
+  const pct=tot?Math.round(don/tot*100):0;
+  document.getElementById('ov-fill').style.width=pct+'%';
+  document.getElementById('ov-pct').textContent=pct+'%';
+  updateIcon();
+}
+
+function renderGrid(){
+  const grid=document.getElementById('sticky-grid');
+  grid.innerHTML='';
   data.forEach(sec=>{
-    const c=CATS[sec.cat]||CATS.visa;
+    const p={...PALS[sec.pal%PALS.length],pal:sec.pal};
     const doneN=sec.tasks.filter(t=>t.done).length;
     const pct=sec.tasks.length?Math.round(doneN/sec.tasks.length*100):0;
 
-    const card=document.createElement('div');card.className='sec-card';
+    const sticky=document.createElement('div');
+    sticky.className='sticky';
+    sticky.style.cssText=`background:${p.bg};color:${p.color}`;
 
-    const head=document.createElement('div');head.className='sec-head';
-    head.innerHTML=`
-      <div class="sec-dot" style="background:${c.color}"></div>
-      <span class="sec-name">${sec.label}</span>
-      <div class="sec-bar-wrap"><div class="sec-bar-fill" style="width:${pct}%;background:${c.color}"></div></div>
-      <span class="sec-frac">${doneN}/${sec.tasks.length}</span>
-      <i class="ti ti-chevron-right sec-chev${sec.open?' open':''}" aria-hidden="true"></i>`;
-    head.onclick=()=>{sec.open=!sec.open;renderAll();updateStats()};
-    card.appendChild(head);
+    // tape
+    const tape=document.createElement('div');tape.className='tape';
+    sticky.appendChild(tape);
 
-    if(sec.open){
-      const body=document.createElement('div');body.className='sec-body';
+    // texture
+    const tex=document.createElement('div');tex.className='texture-overlay';
+    sticky.appendChild(tex);
 
-      sec.tasks.forEach(task=>{
-        const row=document.createElement('div');row.className='task-row';
-        row.innerHTML=`
-          <div class="t-check${task.done?' done':''}" data-tid="${task.id}" tabindex="0" role="checkbox" aria-checked="${task.done}"></div>
-          <span class="t-text${task.done?' done':''}">${task.text}</span>
-          ${task.date?`<span class="t-date-pill" style="background:${c.bg};color:${c.txt}">${fmtDate(task.date)}</span>`:''}
-          <div class="t-actions">
-            <button class="t-btn" data-edit="${task.id}" data-sid="${sec.id}" aria-label="编辑"><i class="ti ti-edit" aria-hidden="true"></i></button>
-            <button class="t-btn" data-del="${task.id}" data-sid="${sec.id}" aria-label="删除"><i class="ti ti-trash" aria-hidden="true"></i></button>
-          </div>`;
-        body.appendChild(row);
+    // inner wrapper (z-index above texture)
+    const inner=document.createElement('div');inner.className='sticky-inner';
+
+    // header
+    const hdr=document.createElement('div');hdr.className='sticky-header';
+    const inp=document.createElement('input');
+    inp.className='sticky-title';inp.type='text';inp.value=sec.label;inp.style.color=p.color;
+    inp.onchange=()=>{sec.label=inp.value.trim()||sec.label};
+    inp.onblur=()=>{if(!inp.value.trim())inp.value=sec.label};
+    const frac=document.createElement('span');frac.className='sticky-frac';frac.textContent=`${doneN}/${sec.tasks.length}`;
+    hdr.appendChild(inp);hdr.appendChild(frac);
+    inner.appendChild(hdr);
+
+    // mini bar
+    const mb=document.createElement('div');mb.className='mini-bar';
+    const mf=document.createElement('div');mf.className='mini-fill';mf.style.width=pct+'%';
+    mb.appendChild(mf);inner.appendChild(mb);
+
+    // tasks
+    const tl=document.createElement('div');tl.className='task-list';
+    sec.tasks.forEach(task=>{
+      const item=document.createElement('div');item.className='task-item';
+
+      const chk=document.createElement('span');
+      chk.className='ti-chk';chk.innerHTML=checkSVG(task.done,p.color);
+      chk.addEventListener('click',e=>{
+        e.stopPropagation();
+        task.done=!task.done;
+        renderGrid();updateOverall();
       });
 
-      const addRow=document.createElement('div');addRow.className='add-row';
-      addRow.innerHTML=`<i class="ti ti-plus" style="font-size:14px;color:var(--color-text-tertiary);flex-shrink:0" aria-hidden="true"></i>
-        <input class="add-inp" type="text" placeholder="添加任务…" data-sid="${sec.id}">
-        <input type="date" class="add-date" data-date-sid="${sec.id}">
-        <button class="add-go" data-addbtn="${sec.id}">添加</button>`;
-      body.appendChild(addRow);
-      card.appendChild(body);
-    }
-    root.appendChild(card);
-  });
+      const right=document.createElement('div');right.className='ti-right';
+      const lbl=document.createElement('span');
+      lbl.className='ti-lbl'+(task.done?' done':'');
+      lbl.textContent=task.text;
+      const dt=document.createElement('span');dt.className='ti-dt';dt.textContent=fmtDate(task.date);
+      right.appendChild(lbl);right.appendChild(dt);
 
-  root.querySelectorAll('.t-check').forEach(el=>{
-    el.onclick=()=>{
-      const tid=el.dataset.tid;
-      data.forEach(s=>s.tasks.forEach(t=>{if(t.id===tid)t.done=!t.done}));
-      renderAll();updateStats();
-    };
+      const acts=document.createElement('div');acts.className='ti-acts';
+      const eBtn=document.createElement('button');eBtn.className='ti-btn';
+      eBtn.innerHTML=editSVG(p.color);
+      eBtn.addEventListener('click',e=>{e.stopPropagation();openEdit(task,sec)});
+      const dBtn=document.createElement('button');dBtn.className='ti-btn';
+      dBtn.innerHTML=delSVG(p.color);
+      dBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        sec.tasks=sec.tasks.filter(t=>t.id!==task.id);
+        renderGrid();updateOverall();
+      });
+      acts.appendChild(eBtn);acts.appendChild(dBtn);
+
+      item.appendChild(chk);item.appendChild(right);item.appendChild(acts);
+      tl.appendChild(item);
+    });
+    inner.appendChild(tl);
+
+    // add row
+    const ar=document.createElement('div');ar.className='add-row';
+    const ai=document.createElement('input');ai.className='add-inp';ai.type='text';ai.placeholder='添加任务…';
+    const ad=document.createElement('input');ad.className='add-dt';ad.type='date';
+    const ag=document.createElement('button');ag.className='add-go';ag.textContent='＋';ag.style.color=p.color;
+    ag.addEventListener('click',()=>doAdd(sec,ai,ad));
+    ai.addEventListener('keydown',e=>{if(e.key==='Enter')doAdd(sec,ai,ad)});
+    ar.appendChild(ai);ar.appendChild(ad);ar.appendChild(ag);
+    inner.appendChild(ar);
+
+    sticky.appendChild(inner);
+    sticky.appendChild(curlEl(p)); // append curl as DOM node — events stay intact
+    grid.appendChild(sticky);
   });
-  root.querySelectorAll('[data-edit]').forEach(el=>{
-    el.onclick=e=>{
-      e.stopPropagation();
-      const sec=data.find(s=>s.id===el.dataset.sid);
-      const task=sec&&sec.tasks.find(t=>t.id===el.dataset.edit);
-      if(task)openEdit(task,sec);
-    };
-  });
-  root.querySelectorAll('[data-del]').forEach(el=>{
-    el.onclick=e=>{
-      e.stopPropagation();
-      const sec=data.find(s=>s.id===el.dataset.sid);
-      if(sec)sec.tasks=sec.tasks.filter(t=>t.id!==el.dataset.del);
-      renderAll();updateStats();
-    };
-  });
-  root.querySelectorAll('[data-addbtn]').forEach(btn=>{
-    btn.onclick=()=>doAdd(btn.dataset.addbtn);
-  });
-  root.querySelectorAll('.add-inp').forEach(inp=>{
-    inp.onkeydown=e=>{if(e.key==='Enter')doAdd(inp.dataset.sid)};
-  });
-  updateStats();
+  updateOverall();
 }
 
-function doAdd(sid){
-  const root=document.getElementById('sections-root');
-  const inp=root.querySelector(`.add-inp[data-sid="${sid}"]`);
-  const dateInp=root.querySelector(`.add-date[data-date-sid="${sid}"]`);
-  const text=inp&&inp.value.trim();if(!text)return;
-  const sec=data.find(s=>s.id===sid);
-  if(sec)sec.tasks.push({id:uid(),text,date:dateInp&&dateInp.value||'',done:false});
-  inp.value='';if(dateInp)dateInp.value='';
-  renderAll();updateStats();
+function doAdd(sec,inp,di){
+  const text=inp.value.trim();if(!text)return;
+  sec.tasks.push({id:uid(),text,date:di.value||'',done:false});
+  inp.value='';di.value='';
+  renderGrid();updateOverall();
 }
 
 function openEdit(task,sec){
   editTarget={task,sec};
   document.getElementById('e-text').value=task.text;
   document.getElementById('e-date').value=task.date||'';
-  document.getElementById('e-cat').value=sec.cat;
-  document.getElementById('edit-wrap').classList.add('show');
+  document.getElementById('edit-ov').classList.add('show');
   document.getElementById('e-text').focus();
 }
-function closeEdit(){editTarget=null;document.getElementById('edit-wrap').classList.remove('show')}
+function closeEdit(){editTarget=null;document.getElementById('edit-ov').classList.remove('show')}
 function saveEdit(){
   if(!editTarget)return;
   const txt=document.getElementById('e-text').value.trim();
   if(txt)editTarget.task.text=txt;
   editTarget.task.date=document.getElementById('e-date').value;
-  const nc=document.getElementById('e-cat').value;
-  if(nc!==editTarget.sec.cat){
-    const ns=data.find(s=>s.cat===nc);
-    if(ns&&ns.id!==editTarget.sec.id){
-      editTarget.sec.tasks=editTarget.sec.tasks.filter(t=>t.id!==editTarget.task.id);
-      ns.tasks.push(editTarget.task);ns.open=true;
-    }
-  }
-  closeEdit();renderAll();updateStats();
+  closeEdit();renderGrid();updateOverall();
 }
 
 function tick(){
-  const flight=new Date('2026-06-26T01:30:00');
-  const ms=flight-new Date();
-  if(ms<=0){['cd-d','cd-h','cd-m'].forEach(id=>document.getElementById(id).textContent='0');return;}
+  const f=new Date('2026-06-26T01:30:00');
+  const ms=Math.max(0,f-new Date());
   document.getElementById('cd-d').textContent=Math.floor(ms/86400000);
   document.getElementById('cd-h').textContent=String(Math.floor(ms%86400000/3600000)).padStart(2,'0');
   document.getElementById('cd-m').textContent=String(Math.floor(ms%3600000/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(Math.floor(ms%60000/1000)).padStart(2,'0');
 }
 
-renderAll();tick();setInterval(tick,30000);
+function showTZ(){
+  try{
+    const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const off=-new Date().getTimezoneOffset();
+    const h=Math.floor(Math.abs(off)/60),m=Math.abs(off)%60;
+    document.getElementById('tz-badge').textContent=`${tz}  UTC${off>=0?'+':'-'}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  }catch(e){document.getElementById('tz-badge').textContent='时区未知'}
+}
+
+renderGrid();showTZ();tick();setInterval(tick,1000);
 </script>
