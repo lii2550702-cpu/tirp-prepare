@@ -1,0 +1,357 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#D4537E;--pink-light:#FBEAF0;--pink-mid:#F4C0D1;--pink-dark:#72243E;
+  --teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#9FE1CB;--teal-dark:#085041;
+  --purple:#7F77DD;--purple-light:#EEEDFE;--purple-mid:#CECBF6;--purple-dark:#3C3489;
+  --amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#FAC775;--amber-dark:#633806;
+  --blue:#378ADD;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--blue-dark:#0C447C;
+  --green:#639922;--green-light:#EAF3DE;--green-mid:#C0DD97;--green-dark:#27500A;
+}
+.wrap{padding:1.5rem 0 3rem;font-family:var(--font-sans)}
+.hero{border:0.5px solid var(--color-border-tertiary);border-radius:16px;padding:20px 22px;margin-bottom:16px;display:flex;align-items:center;gap:20px}
+.hero-left{flex:1}
+.hero-eyebrow{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.hero-title{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.hero-sub{font-size:12px;color:var(--color-text-secondary)}
+.hero-right{text-align:center}
+.cd-ring{width:96px;height:96px;border-radius:50%;border:3px solid var(--color-border-tertiary);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.cd-ring svg{position:absolute;top:0;left:0;width:96px;height:96px;transform:rotate(-90deg)}
+.cd-ring circle{fill:none;stroke-width:3}
+.cd-ring .track{stroke:var(--color-border-tertiary)}
+.cd-ring .arc{stroke:#D4537E;stroke-linecap:round;transition:stroke-dashoffset .5s}
+.cd-d{font-size:22px;font-weight:500;color:var(--color-text-primary);line-height:1;position:relative;z-index:1}
+.cd-lbl{font-size:10px;color:var(--color-text-tertiary);position:relative;z-index:1}
+.cd-hm{display:flex;gap:6px;margin-top:6px;justify-content:center}
+.cd-chip{background:var(--color-background-secondary);border-radius:6px;padding:3px 8px;text-align:center;min-width:36px}
+.cd-chip-n{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.cd-chip-l{font-size:10px;color:var(--color-text-tertiary)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stat-card{border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:11px 13px;background:var(--color-background-primary)}
+.stat-l{font-size:11px;color:var(--color-text-tertiary);margin-bottom:5px}
+.stat-v{font-size:20px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.overall-bar{border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:14px 16px;margin-bottom:16px;background:var(--color-background-primary)}
+.ob-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ob-label{font-size:12px;color:var(--color-text-secondary)}
+.ob-pct{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.ob-track{height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+.ob-fill{height:100%;border-radius:3px;background:#D4537E;transition:width .35s}
+.ob-cats{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.ob-cat-pill{display:flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:20px;border:0.5px solid var(--color-border-tertiary)}
+
+.sections{}
+.sec-card{border:0.5px solid var(--color-border-tertiary);border-radius:12px;margin-bottom:10px;background:var(--color-background-primary);overflow:hidden}
+.sec-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none;transition:background .15s}
+.sec-head:hover{background:var(--color-background-secondary)}
+.sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sec-name{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.sec-bar-wrap{width:80px;height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
+.sec-bar-fill{height:100%;border-radius:2px;transition:width .3s}
+.sec-frac{font-size:11px;color:var(--color-text-tertiary);min-width:28px;text-align:right}
+.sec-chev{font-size:15px;color:var(--color-text-tertiary);transition:transform .2s}
+.sec-chev.open{transform:rotate(90deg)}
+.sec-body{border-top:0.5px solid var(--color-border-tertiary)}
+.task-row{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:0.5px solid var(--color-border-tertiary);transition:background .12s}
+.task-row:last-of-type{border-bottom:none}
+.task-row:hover{background:var(--color-background-secondary)}
+.task-row:hover .t-actions{opacity:1}
+.t-check{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--color-border-secondary);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.t-check.done{border-color:#D4537E;background:#D4537E}
+.t-check.done::after{content:'';display:block;width:5px;height:9px;border:2px solid white;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px)}
+.t-text{font-size:13px;color:var(--color-text-primary);flex:1;line-height:1.4}
+.t-text.done{color:var(--color-text-tertiary);text-decoration:line-through}
+.t-date-pill{font-size:10px;padding:2px 7px;border-radius:20px;white-space:nowrap;font-weight:400}
+.t-actions{opacity:0;display:flex;gap:2px;transition:opacity .15s}
+.t-btn{background:none;border:none;cursor:pointer;font-size:14px;color:var(--color-text-tertiary);padding:3px 4px;border-radius:4px;line-height:1}
+.t-btn:hover{color:var(--color-text-primary);background:var(--color-border-tertiary)}
+.add-row{display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:0.5px solid var(--color-border-tertiary)}
+.add-inp{flex:1;border:none;background:transparent;font-size:13px;color:var(--color-text-primary);outline:none;font-family:var(--font-sans)}
+.add-inp::placeholder{color:var(--color-text-tertiary)}
+.add-date{font-size:11px;border:0.5px solid var(--color-border-tertiary);border-radius:5px;padding:3px 6px;color:var(--color-text-secondary);background:var(--color-background-primary);font-family:var(--font-sans);cursor:pointer;outline:none}
+.add-go{font-size:11px;padding:3px 10px;border:0.5px solid var(--color-border-secondary);border-radius:5px;cursor:pointer;background:transparent;color:var(--color-text-secondary);font-family:var(--font-sans);transition:background .12s}
+.add-go:hover{background:var(--color-background-secondary)}
+
+.edit-wrap{border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--color-background-primary);display:none}
+.edit-wrap.show{display:block}
+.edit-field{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.edit-field label{font-size:12px;color:var(--color-text-tertiary);min-width:32px}
+.edit-field input,.edit-field select{flex:1;padding:6px 9px;border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none}
+.edit-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.btn-save{padding:5px 16px;background:#D4537E;color:white;border:none;border-radius:7px;font-size:13px;cursor:pointer;font-family:var(--font-sans)}
+.btn-cancel{padding:5px 14px;background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;cursor:pointer;font-family:var(--font-sans)}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">六月日本行程计划 — 交互任务清单含倒计时与进度追踪</h2>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Jun 2026 · Japan Trip</div>
+    <div class="hero-title">六月日本行程计划</div>
+    <div class="hero-sub">6月26日 01:30 起飞 &nbsp;·&nbsp; 点击勾选 &nbsp;·&nbsp; 悬停编辑</div>
+  </div>
+  <div class="hero-right">
+    <div class="cd-ring">
+      <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+        <circle class="track" cx="48" cy="48" r="44"/>
+        <circle class="arc" id="cd-arc" cx="48" cy="48" r="44" stroke-dasharray="276.5" stroke-dashoffset="0"/>
+      </svg>
+      <div class="cd-d" id="cd-d">--</div>
+      <div class="cd-lbl">天</div>
+    </div>
+    <div class="cd-hm">
+      <div class="cd-chip"><div class="cd-chip-n" id="cd-h">--</div><div class="cd-chip-l">时</div></div>
+      <div class="cd-chip"><div class="cd-chip-n" id="cd-m">--</div><div class="cd-chip-l">分</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-l">全部任务</div><div class="stat-v" id="s-total">—</div></div>
+  <div class="stat-card"><div class="stat-l">已完成</div><div class="stat-v" style="color:#D4537E" id="s-done">—</div></div>
+  <div class="stat-card"><div class="stat-l">待完成</div><div class="stat-v" id="s-todo">—</div></div>
+  <div class="stat-card"><div class="stat-l">完成率</div><div class="stat-v" id="s-pct">—</div></div>
+</div>
+
+<div class="overall-bar">
+  <div class="ob-head">
+    <span class="ob-label">整体进度</span>
+    <span class="ob-pct" id="ob-pct">0%</span>
+  </div>
+  <div class="ob-track"><div class="ob-fill" id="ob-fill" style="width:0%"></div></div>
+  <div class="ob-cats" id="ob-cats"></div>
+</div>
+
+<div id="edit-wrap" class="edit-wrap">
+  <div class="edit-field"><label>任务</label><input id="e-text" type="text" placeholder="任务名称"></div>
+  <div class="edit-field"><label>日期</label><input id="e-date" type="date"></div>
+  <div class="edit-field"><label>分类</label>
+    <select id="e-cat">
+      <option value="visa">签证 / 证件</option>
+      <option value="grad">毕业相关</option>
+      <option value="money">财务 / 取现</option>
+      <option value="pack">打包 / 行李</option>
+      <option value="beauty">美甲 / 美容</option>
+      <option value="fly">出发</option>
+    </select>
+  </div>
+  <div class="edit-btns">
+    <button class="btn-cancel" onclick="closeEdit()">取消</button>
+    <button class="btn-save" onclick="saveEdit()">保存</button>
+  </div>
+</div>
+
+<div id="sections-root" class="sections"></div>
+</div>
+
+<script>
+const CATS={
+  visa:  {label:'签证 / 证件',icon:'ti-shield-check',color:'#D4537E',   bg:'#FBEAF0',txt:'#72243E'},
+  grad:  {label:'毕业相关',   icon:'ti-school',      color:'#7F77DD',   bg:'#EEEDFE',txt:'#3C3489'},
+  money: {label:'财务 / 取现',icon:'ti-coin',        color:'#BA7517',   bg:'#FAEEDA',txt:'#633806'},
+  pack:  {label:'打包 / 行李',icon:'ti-luggage',     color:'#1D9E75',   bg:'#E1F5EE',txt:'#085041'},
+  beauty:{label:'美甲 / 美容',icon:'ti-nail',        color:'#D4537E',   bg:'#FBEAF0',txt:'#72243E'},
+  fly:   {label:'出发',       icon:'ti-plane',       color:'#378ADD',   bg:'#E6F1FB',txt:'#0C447C'},
+};
+
+let data=[
+  {id:'s1',cat:'visa',  label:'签证 / 证件',open:true,tasks:[
+    {id:'t1', text:'旅行社提交材料',              date:'2026-06-01',done:true},
+    {id:'t2', text:'收到证件材料 ok 反馈',        date:'2026-06-02',done:false},
+    {id:'t3', text:'签证正式开始办理（约8工作日）',date:'2026-06-02',done:false},
+    {id:'t4', text:'确认收到签证',                date:'2026-06-13',done:false},
+  ]},
+  {id:'s2',cat:'grad',  label:'毕业相关',open:true,tasks:[
+    {id:'t5', text:'毕业答辩',date:'2026-06-12',done:false},
+    {id:'t6', text:'拍毕业照',date:'2026-06-12',done:false},
+  ]},
+  {id:'s3',cat:'money', label:'财务 / 取现',open:true,tasks:[
+    {id:'t7', text:'预约取现（提前1周）',date:'2026-06-08',done:false},
+    {id:'t8', text:'购汇',              date:'2026-06-09',done:false},
+    {id:'t9', text:'银行取现日元',      date:'2026-06-15',done:false},
+  ]},
+  {id:'s4',cat:'pack',  label:'打包 / 行李',open:true,tasks:[
+    {id:'t10',text:'收拾部分行李',           date:'2026-06-20',done:false},
+    {id:'t11',text:'寄回不需要的行李',       date:'2026-06-22',done:false},
+    {id:'t12',text:'收拾旅行行李（Day 1）',  date:'2026-06-24',done:false},
+    {id:'t13',text:'收拾旅行行李（Day 2）',  date:'2026-06-25',done:false},
+  ]},
+  {id:'s5',cat:'beauty',label:'美甲 / 美容',open:true,tasks:[
+    {id:'t14',text:'卸甲',date:'2026-06-21',done:false},
+    {id:'t15',text:'美甲',date:'2026-06-25',done:false},
+  ]},
+  {id:'s6',cat:'fly',   label:'出发',open:true,tasks:[
+    {id:'t16',text:'出发前吃饭（18:00–19:00）',date:'2026-06-25',done:false},
+    {id:'t17',text:'前往机场',                 date:'2026-06-25',done:false},
+    {id:'t18',text:'起飞 01:30',               date:'2026-06-26',done:false},
+  ]},
+];
+
+let editTarget=null;
+function uid(){return 't'+Date.now()+Math.random().toString(36).slice(2,5)}
+function fmtDate(d){if(!d)return'';const dt=new Date(d+'T00:00:00');return(dt.getMonth()+1)+'月'+dt.getDate()+'日'}
+
+function calcStats(){
+  let total=0,done=0;
+  data.forEach(s=>s.tasks.forEach(t=>{total++;if(t.done)done++;}));
+  return{total,done,todo:total-done,pct:total?Math.round(done/total*100):0};
+}
+
+function updateStats(){
+  const{total,done,todo,pct}=calcStats();
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-todo').textContent=todo;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('ob-fill').style.width=pct+'%';
+  document.getElementById('ob-pct').textContent=pct+'%';
+
+  const cats=document.getElementById('ob-cats');
+  cats.innerHTML='';
+  data.forEach(s=>{
+    const c=CATS[s.cat];const d2=s.tasks.filter(t=>t.done).length;
+    const el=document.createElement('div');
+    el.className='ob-cat-pill';
+    el.style.background=c.bg;el.style.borderColor=c.color+'44';
+    el.innerHTML=`<i class="ti ${c.icon}" style="font-size:12px;color:${c.color}" aria-hidden="true"></i><span style="color:${c.txt}">${d2}/${s.tasks.length}</span>`;
+    cats.appendChild(el);
+  });
+
+  const totalDays=25;
+  const flight=new Date('2026-06-26T01:30:00');
+  const start=new Date('2026-06-01T00:00:00');
+  const now=new Date();
+  const elapsed=(now-start)/(flight-start);
+  const circ=2*Math.PI*44;
+  const offset=circ*(1-Math.max(0,Math.min(1,elapsed)));
+  const arc=document.getElementById('cd-arc');
+  if(arc)arc.style.strokeDashoffset=offset.toFixed(1);
+}
+
+function renderAll(){
+  const root=document.getElementById('sections-root');
+  root.innerHTML='';
+  data.forEach(sec=>{
+    const c=CATS[sec.cat]||CATS.visa;
+    const doneN=sec.tasks.filter(t=>t.done).length;
+    const pct=sec.tasks.length?Math.round(doneN/sec.tasks.length*100):0;
+
+    const card=document.createElement('div');card.className='sec-card';
+
+    const head=document.createElement('div');head.className='sec-head';
+    head.innerHTML=`
+      <div class="sec-dot" style="background:${c.color}"></div>
+      <span class="sec-name">${sec.label}</span>
+      <div class="sec-bar-wrap"><div class="sec-bar-fill" style="width:${pct}%;background:${c.color}"></div></div>
+      <span class="sec-frac">${doneN}/${sec.tasks.length}</span>
+      <i class="ti ti-chevron-right sec-chev${sec.open?' open':''}" aria-hidden="true"></i>`;
+    head.onclick=()=>{sec.open=!sec.open;renderAll();updateStats()};
+    card.appendChild(head);
+
+    if(sec.open){
+      const body=document.createElement('div');body.className='sec-body';
+
+      sec.tasks.forEach(task=>{
+        const row=document.createElement('div');row.className='task-row';
+        row.innerHTML=`
+          <div class="t-check${task.done?' done':''}" data-tid="${task.id}" tabindex="0" role="checkbox" aria-checked="${task.done}"></div>
+          <span class="t-text${task.done?' done':''}">${task.text}</span>
+          ${task.date?`<span class="t-date-pill" style="background:${c.bg};color:${c.txt}">${fmtDate(task.date)}</span>`:''}
+          <div class="t-actions">
+            <button class="t-btn" data-edit="${task.id}" data-sid="${sec.id}" aria-label="编辑"><i class="ti ti-edit" aria-hidden="true"></i></button>
+            <button class="t-btn" data-del="${task.id}" data-sid="${sec.id}" aria-label="删除"><i class="ti ti-trash" aria-hidden="true"></i></button>
+          </div>`;
+        body.appendChild(row);
+      });
+
+      const addRow=document.createElement('div');addRow.className='add-row';
+      addRow.innerHTML=`<i class="ti ti-plus" style="font-size:14px;color:var(--color-text-tertiary);flex-shrink:0" aria-hidden="true"></i>
+        <input class="add-inp" type="text" placeholder="添加任务…" data-sid="${sec.id}">
+        <input type="date" class="add-date" data-date-sid="${sec.id}">
+        <button class="add-go" data-addbtn="${sec.id}">添加</button>`;
+      body.appendChild(addRow);
+      card.appendChild(body);
+    }
+    root.appendChild(card);
+  });
+
+  root.querySelectorAll('.t-check').forEach(el=>{
+    el.onclick=()=>{
+      const tid=el.dataset.tid;
+      data.forEach(s=>s.tasks.forEach(t=>{if(t.id===tid)t.done=!t.done}));
+      renderAll();updateStats();
+    };
+  });
+  root.querySelectorAll('[data-edit]').forEach(el=>{
+    el.onclick=e=>{
+      e.stopPropagation();
+      const sec=data.find(s=>s.id===el.dataset.sid);
+      const task=sec&&sec.tasks.find(t=>t.id===el.dataset.edit);
+      if(task)openEdit(task,sec);
+    };
+  });
+  root.querySelectorAll('[data-del]').forEach(el=>{
+    el.onclick=e=>{
+      e.stopPropagation();
+      const sec=data.find(s=>s.id===el.dataset.sid);
+      if(sec)sec.tasks=sec.tasks.filter(t=>t.id!==el.dataset.del);
+      renderAll();updateStats();
+    };
+  });
+  root.querySelectorAll('[data-addbtn]').forEach(btn=>{
+    btn.onclick=()=>doAdd(btn.dataset.addbtn);
+  });
+  root.querySelectorAll('.add-inp').forEach(inp=>{
+    inp.onkeydown=e=>{if(e.key==='Enter')doAdd(inp.dataset.sid)};
+  });
+  updateStats();
+}
+
+function doAdd(sid){
+  const root=document.getElementById('sections-root');
+  const inp=root.querySelector(`.add-inp[data-sid="${sid}"]`);
+  const dateInp=root.querySelector(`.add-date[data-date-sid="${sid}"]`);
+  const text=inp&&inp.value.trim();if(!text)return;
+  const sec=data.find(s=>s.id===sid);
+  if(sec)sec.tasks.push({id:uid(),text,date:dateInp&&dateInp.value||'',done:false});
+  inp.value='';if(dateInp)dateInp.value='';
+  renderAll();updateStats();
+}
+
+function openEdit(task,sec){
+  editTarget={task,sec};
+  document.getElementById('e-text').value=task.text;
+  document.getElementById('e-date').value=task.date||'';
+  document.getElementById('e-cat').value=sec.cat;
+  document.getElementById('edit-wrap').classList.add('show');
+  document.getElementById('e-text').focus();
+}
+function closeEdit(){editTarget=null;document.getElementById('edit-wrap').classList.remove('show')}
+function saveEdit(){
+  if(!editTarget)return;
+  const txt=document.getElementById('e-text').value.trim();
+  if(txt)editTarget.task.text=txt;
+  editTarget.task.date=document.getElementById('e-date').value;
+  const nc=document.getElementById('e-cat').value;
+  if(nc!==editTarget.sec.cat){
+    const ns=data.find(s=>s.cat===nc);
+    if(ns&&ns.id!==editTarget.sec.id){
+      editTarget.sec.tasks=editTarget.sec.tasks.filter(t=>t.id!==editTarget.task.id);
+      ns.tasks.push(editTarget.task);ns.open=true;
+    }
+  }
+  closeEdit();renderAll();updateStats();
+}
+
+function tick(){
+  const flight=new Date('2026-06-26T01:30:00');
+  const ms=flight-new Date();
+  if(ms<=0){['cd-d','cd-h','cd-m'].forEach(id=>document.getElementById(id).textContent='0');return;}
+  document.getElementById('cd-d').textContent=Math.floor(ms/86400000);
+  document.getElementById('cd-h').textContent=String(Math.floor(ms%86400000/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(Math.floor(ms%3600000/60000)).padStart(2,'0');
+}
+
+renderAll();tick();setInterval(tick,30000);
+</script>
