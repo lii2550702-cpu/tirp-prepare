@@ -484,7 +484,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebas
 import {
   getFirestore, collection, doc,
   onSnapshot, setDoc, deleteDoc,
-  getDocs
+  getDocs, writeBatch
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -575,13 +575,33 @@ async function saveTrip(id, data) {
   }
 }
 async function removeTrip(id) {
-  // delete all notes subcollections too
-  const cols = ['notes_depart','notes_return'];
-  for (const c of cols) {
-    const snap = await getDocs(collection(db,'trips',id,c));
-    for (const d of snap.docs) await deleteDoc(d.ref);
+  // Pause the trips listener to avoid rendering intermediate states
+  if (tripsUnsub) { tripsUnsub(); tripsUnsub = null; }
+
+  try {
+    const batch = writeBatch(db);
+
+    // Queue deletion of all subcollection docs
+    const cols = ['notes_depart', 'notes_return'];
+    for (const c of cols) {
+      const snap = await getDocs(collection(db, 'trips', id, c));
+      snap.docs.forEach(d => batch.delete(d.ref));
+    }
+    // Queue deletion of the trip doc itself
+    batch.delete(doc(db, 'trips', id));
+
+    // Commit everything in one round-trip
+    await batch.commit();
+
+    // Remove from local state immediately so UI updates at once
+    delete trips[id];
+    renderTripList();
+  } catch(e) {
+    console.error('❌ removeTrip failed:', e);
+  } finally {
+    // Re-subscribe regardless of success/failure
+    loadTrips();
   }
-  await deleteDoc(doc(db,'trips',id));
 }
 
 function getNoteCol(tripId, tab) {
@@ -653,7 +673,12 @@ function renderTripList() {
     card.addEventListener('click', () => openTrip(id));
     delBtn.addEventListener('click', e => {
       e.stopPropagation();
-      if (confirm(`确认删除「${t.name}」？此操作不可恢复。`)) removeTrip(id);
+      if (confirm(`确认删除「${t.name}」？此操作不可恢复。`)) {
+        delBtn.disabled = true;
+        card.style.opacity = '0.4';
+        card.style.pointerEvents = 'none';
+        removeTrip(id);
+      }
     });
     tripList.appendChild(card);
   });
