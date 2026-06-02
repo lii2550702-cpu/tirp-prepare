@@ -1,428 +1,1344 @@
-
-<link href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>出行准备清单</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{font-family:'Klee One',cursive;background:transparent}
-.page{padding:1rem 0 3rem}
-.top-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-.page-title{font-size:24px;font-weight:400;color:var(--color-text-primary)}
-.page-meta{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
-.tz-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-tertiary);margin-top:4px}
-.cd-block{text-align:right}
-.cd-row{display:flex;align-items:center;gap:10px;justify-content:flex-end}
-.cd-icon{width:48px;height:48px;flex-shrink:0}
-.cd-nums{font-size:26px;font-weight:400;color:var(--color-text-primary);line-height:1;letter-spacing:.5px}
-.cd-accent{color:#b85c3a}
-.cd-sub{font-size:11px;color:var(--color-text-secondary);margin-top:3px;text-align:right}
-.ov-strip{border-radius:8px;padding:9px 13px;margin-bottom:18px;background:var(--color-background-secondary);display:flex;align-items:center;gap:12px}
-.ov-label{font-size:13px;color:var(--color-text-secondary);white-space:nowrap}
-.ov-track{flex:1;height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
-.ov-fill{height:100%;border-radius:3px;background:#b85c3a;transition:width .4s}
-.ov-pct{font-size:13px;color:var(--color-text-primary);min-width:34px;text-align:right}
-.sticky-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px;align-items:start}
-.sticky{position:relative;padding:14px 13px 32px;min-height:190px;display:flex;flex-direction:column;filter:drop-shadow(1px 2px 3px rgba(0,0,0,.16)) drop-shadow(3px 5px 10px rgba(0,0,0,.09))}
-.tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1.5deg);width:46px;height:17px;z-index:10;background:rgba(255,255,255,.52);border:0.5px solid rgba(200,190,160,.5);border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.10)}
-.texture-overlay{position:absolute;inset:0;pointer-events:none;z-index:0;border-radius:inherit;opacity:.5;background-image:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(0,0,0,.022) 23px)}
-.curl-svg{position:absolute;bottom:0;right:0;z-index:5;pointer-events:none}
-.sticky-inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column}
-.sticky-header{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-bottom:7px;border-bottom:1.5px dashed rgba(0,0,0,.13)}
-.sticky-title{font-size:15px;font-weight:400;color:inherit;font-family:'Klee One',cursive;background:transparent;border:none;outline:none;flex:1;min-width:0;cursor:text;padding:0;line-height:1.3}
-.sticky-title:focus{border-bottom:1px dashed rgba(0,0,0,.25)}
-.sticky-frac{font-size:11px;opacity:.55;white-space:nowrap}
-.mini-bar{height:2.5px;border-radius:2px;background:rgba(0,0,0,.1);margin-bottom:9px;overflow:hidden}
-.mini-fill{height:100%;border-radius:2px;background:rgba(0,0,0,.22);transition:width .35s}
-.task-list{flex:1;display:flex;flex-direction:column;gap:5px}
-.task-item{display:flex;align-items:flex-start;gap:7px;padding:2px 3px;border-radius:3px;transition:background .12s}
-.task-item:hover{background:rgba(0,0,0,.06)}
-.task-item:hover .ti-acts{opacity:1}
-.ti-chk{flex-shrink:0;margin-top:2px;cursor:pointer;line-height:0;display:block}
-.ti-right{flex:1;min-width:0}
-.ti-lbl{font-size:13px;color:inherit;line-height:1.35;font-family:'Klee One',cursive;display:block;position:relative}
-.ti-lbl::after{content:'';position:absolute;left:0;top:50%;height:1px;background:currentColor;width:0;transition:width .5s ease;opacity:.55}
-.ti-lbl.done{opacity:.4}
-.ti-lbl.done::after{width:100%}
-.ti-dt{font-size:10px;opacity:.45;display:block;margin-top:1px}
-.ti-acts{opacity:0;display:flex;gap:1px;flex-shrink:0;transition:opacity .15s}
-.ti-btn{background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:3px;line-height:0;display:flex;align-items:center;justify-content:center}
-.ti-btn:hover{background:rgba(0,0,0,.1)}
-.add-row{display:flex;align-items:center;gap:5px;margin-top:8px;padding-top:7px;border-top:1px dashed rgba(0,0,0,.12)}
-.add-inp{flex:1;border:none;background:transparent;font-size:13px;outline:none;color:inherit;font-family:'Klee One',cursive;min-width:0}
-.add-inp::placeholder{opacity:.35}
-.add-dt{font-size:10px;border:none;border-bottom:1px solid rgba(0,0,0,.15);background:transparent;color:inherit;font-family:'Klee One',cursive;outline:none;width:78px}
-.add-go{font-size:14px;border:1px solid rgba(0,0,0,.16);border-radius:4px;background:transparent;cursor:pointer;padding:1px 7px;color:inherit;font-family:'Klee One',cursive;line-height:1.5;flex-shrink:0}
-.edit-ov{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:15px;margin-bottom:14px;display:none}
-.edit-ov.show{display:block}
-.ef{display:flex;align-items:center;gap:10px;margin-bottom:9px}
-.ef label{font-size:13px;color:var(--color-text-secondary);min-width:32px}
-.ef input{flex:1;padding:5px 8px;border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:'Klee One',cursive;outline:none}
-.ebtns{display:flex;gap:8px;justify-content:flex-end}
-.ebtn-s{padding:5px 15px;background:#b85c3a;color:white;border:none;border-radius:7px;font-size:13px;cursor:pointer;font-family:'Klee One',cursive}
-.ebtn-c{padding:5px 13px;background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);border-radius:7px;font-size:13px;cursor:pointer;font-family:'Klee One',cursive}
-</style>
-
-<div class="page">
-<div class="top-bar">
-  <div>
-    <div class="page-title">六月日本行程 ✈</div>
-    <div class="page-meta">6月26日 01:30 起飞 · 点击勾选 · 单击标题改名</div>
-    <div class="tz-badge" id="tz-badge">时区检测中…</div>
-  </div>
-  <div class="cd-block">
-    <div class="cd-row">
-      <div class="cd-icon" id="cd-icon"></div>
-      <div class="cd-nums">
-        <span class="cd-accent" id="cd-d">--</span><span style="font-size:15px;opacity:.6"> 天 </span><span class="cd-accent" id="cd-h">--</span><span style="opacity:.4">:</span><span class="cd-accent" id="cd-m">--</span><span style="opacity:.4">:</span><span class="cd-accent" id="cd-s">--</span>
-      </div>
-    </div>
-    <div class="cd-sub">距起飞倒计时（每秒更新）</div>
-  </div>
-</div>
-<div class="ov-strip">
-  <span class="ov-label">整体进度</span>
-  <div class="ov-track"><div class="ov-fill" id="ov-fill" style="width:0%"></div></div>
-  <span class="ov-pct" id="ov-pct">0%</span>
-</div>
-<div id="edit-ov" class="edit-ov">
-  <div class="ef"><label>任务</label><input id="e-text" type="text"></div>
-  <div class="ef"><label>日期</label><input id="e-date" type="date"></div>
-  <div class="ebtns">
-    <button class="ebtn-c" onclick="closeEdit()">取消</button>
-    <button class="ebtn-s" onclick="saveEdit()">保存</button>
-  </div>
-</div>
-<div class="sticky-grid" id="sticky-grid"></div>
-</div>
-
-<script>
-const PALS=[
-  {bg:'#FEF8C0',color:'#4A3800',curl1:'#E8DA90',curl2:'#C8B860'},
-  {bg:'#FCE4EC',color:'#5A1828',curl1:'#EDCADA',curl2:'#C898AE'},
-  {bg:'#E9F5EA',color:'#183820',curl1:'#C8E8CA',curl2:'#90C095'},
-  {bg:'#E4F0FD',color:'#0A2848',curl1:'#C0D8F5',curl2:'#88B0DC'},
-  {bg:'#F3E5F5',color:'#381048',curl1:'#E0C8EC',curl2:'#B090C4'},
-  {bg:'#FFF0DE',color:'#402808',curl1:'#EED8B0',curl2:'#C8A878'},
-];
-
-// icon state: 'packing0'..'packing4', 'walking', 'flying'
-// packing progress = how many of the two 行李 tasks are done
-// walking = both 行李 tasks done
-// flying = 起飞 task done
-
-let data=[
-  {id:'s1',label:'签证 / 证件',pal:0,tasks:[
-    {id:'t1',text:'旅行社提交材料',           date:'2026-06-01',done:true},
-    {id:'t2',text:'收到证件材料 ok 反馈',     date:'2026-06-02',done:false},
-    {id:'t3',text:'签证正式办理（约8工作日）', date:'2026-06-02',done:false},
-    {id:'t4',text:'确认收到签证',             date:'2026-06-13',done:false},
-  ]},
-  {id:'s2',label:'毕业相关',pal:1,tasks:[
-    {id:'t5',text:'毕业答辩',date:'2026-06-12',done:false},
-    {id:'t6',text:'拍毕业照',date:'2026-06-12',done:false},
-  ]},
-  {id:'s3',label:'财务 / 取现',pal:5,tasks:[
-    {id:'t7',text:'预约取现（提前1周）',date:'2026-06-08',done:false},
-    {id:'t8',text:'购汇',              date:'2026-06-09',done:false},
-    {id:'t9',text:'银行取现日元',      date:'2026-06-15',done:false},
-  ]},
-  {id:'s4',label:'打包 / 行李',pal:2,tasks:[
-    {id:'t10',text:'收拾部分行李',         date:'2026-06-20',done:false},
-    {id:'t11',text:'寄回不需要的行李',     date:'2026-06-22',done:false},
-    {id:'t12',text:'收拾旅行行李 Day 1',   date:'2026-06-24',done:false},
-    {id:'t13',text:'收拾旅行行李 Day 2',   date:'2026-06-25',done:false},
-  ]},
-  {id:'s5',label:'美甲 / 美容',pal:4,tasks:[
-    {id:'t14',text:'卸甲',date:'2026-06-21',done:false},
-    {id:'t15',text:'美甲',date:'2026-06-25',done:false},
-  ]},
-  {id:'s6',label:'出发',pal:3,tasks:[
-    {id:'t16',text:'出发前吃饭 18:00–19:00',date:'2026-06-25',done:false},
-    {id:'t17',text:'前往机场',              date:'2026-06-25',done:false},
-    {id:'t18',text:'起飞 01:30',            date:'2026-06-26',done:false},
-  ]},
-];
-
-// IDs that control icon state
-const PACK_TASK_IDS=['t10','t11','t12','t13'];
-const FLY_TASK_ID='t18';
-
-let editTarget=null;
-function uid(){return 't'+Date.now()+Math.random().toString(36).slice(2,5)}
-function fmtDate(d){if(!d)return'';const dt=new Date(d+'T00:00:00');return(dt.getMonth()+1)+'/'+(dt.getDate())}
-
-function getIconState(){
-  // check fly first
-  let flyDone=false;
-  data.forEach(s=>s.tasks.forEach(t=>{if(t.id===FLY_TASK_ID&&t.done)flyDone=true}));
-  if(flyDone)return'flying';
-  let packDone=0;
-  data.forEach(s=>s.tasks.forEach(t=>{if(PACK_TASK_IDS.includes(t.id)&&t.done)packDone++}));
-  if(packDone>=4)return'walking';
-  return'packing:'+packDone; // 0,1,2,3
-}
-
-// ── ICON SVGs ──
-
-function packingSVG(filled){
-  // filled = 0..3, items inside open suitcase
-  const items=[
-    {x:16,y:20,w:6,h:4,c:'#e8a060'},
-    {x:24,y:19,w:5,h:3,c:'#7db8e0'},
-    {x:14,y:24,w:8,h:3,c:'#d4a0c0'},
-  ];
-  let itemsSVG='';
-  for(let i=0;i<Math.min(filled,items.length);i++){
-    const it=items[i];
-    itemsSVG+=`<rect x="${it.x}" y="${it.y}" width="${it.w}" height="${it.h}" rx="1" fill="${it.c}" opacity=".9"/>`;
+  :root {
+    --bg: #F5F0E8;
+    --card-bg: #FFFDF7;
+    --primary: #3D5A80;
+    --primary-light: #98C1D9;
+    --accent: #E07A5F;
+    --text: #2C2C2C;
+    --text-muted: #888;
+    --border: #D9CFC0;
+    --shadow: rgba(60,40,10,0.13);
+    --tape: rgba(200,220,255,0.55);
+    --font: 'Klee One', serif;
   }
-  // arm animation based on fill
-  const armAnim=filled<4?`<animateTransform attributeName="transform" type="rotate" values="-25 18 18;20 18 18;-25 18 18" dur="1.2s" repeatCount="indefinite"/>`:'';
-  return`<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-    <!-- person -->
-    <circle cx="10" cy="8" r="4" fill="#b85c3a"/>
-    <rect x="6" y="13" width="8" height="10" rx="2" fill="#b85c3a"/>
-    <!-- arm -->
-    <g transform="rotate(0 18 18)"><line x1="14" y1="15" x2="20" y2="22" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round">${armAnim}</line></g>
-    <!-- static arm -->
-    <line x1="6" y1="16" x2="2" y2="22" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
-    <!-- legs -->
-    <line x1="9" y1="23" x2="7" y2="35" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="13" y1="23" x2="15" y2="35" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
-    <!-- open suitcase body -->
-    <rect x="13" y="16" width="26" height="20" rx="2" fill="none" stroke="#b85c3a" stroke-width="1.4"/>
-    <!-- suitcase lid open (hinge top) -->
-    <path d="M13 16 Q26 8 39 16" fill="none" stroke="#b85c3a" stroke-width="1.4"/>
-    <!-- items inside -->
-    ${itemsSVG}
-    <!-- handle -->
-    <rect x="20" y="13.5" width="9" height="3" rx="1.2" fill="none" stroke="#b85c3a" stroke-width="1.2"/>
-  </svg>`;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(152,193,217,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(224,122,95,0.12) 0%, transparent 60%);
+  }
+
+  /* ── HEADER ── */
+  #app-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1.5px solid var(--border);
+    padding: 14px 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  #app-header h1 {
+    font-size: 1.35rem; font-weight: 600; letter-spacing: .04em;
+    color: var(--primary);
+    display: flex; align-items: center; gap: 8px;
+  }
+  #back-btn {
+    display: none; align-items: center; gap: 6px;
+    background: none; border: 1.5px solid var(--primary);
+    color: var(--primary); padding: 5px 13px;
+    border-radius: 20px; cursor: pointer; font-family: var(--font);
+    font-size: .88rem; transition: all .2s;
+  }
+  #back-btn:hover { background: var(--primary); color: #fff; }
+  #back-btn svg { width:14px;height:14px; }
+
+  /* ── HOME ── */
+  #home-view { padding: 32px 28px; max-width: 900px; margin: 0 auto; }
+  #home-top {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 26px;
+  }
+  #home-top h2 { font-size: 1.1rem; color: var(--text-muted); font-weight: 400; }
+
+  /* New Trip Form */
+  #new-trip-form {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 28px;
+    display: none;
+    gap: 14px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 16px var(--shadow);
+  }
+  #new-trip-form.open { display: flex; }
+  #new-trip-form input {
+    flex: 1; min-width: 150px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 9px 14px; font-family: var(--font); font-size: .95rem;
+    background: #FFF; color: var(--text); outline: none;
+    transition: border-color .2s;
+  }
+  #new-trip-form input:focus { border-color: var(--primary); }
+  #new-trip-form input[type="date"] { color: var(--text-muted); }
+  .form-actions { display:flex; gap:10px; align-items:center; width:100%; }
+  .btn-primary {
+    background: var(--primary); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 9px 22px; font-family: var(--font); font-size:.95rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-primary:hover { background: #2d4060; transform: translateY(-1px); }
+  .btn-ghost {
+    background: none; color: var(--text-muted);
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 9px 18px; font-family: var(--font); font-size:.95rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-ghost:hover { border-color: #aaa; }
+  #add-trip-btn {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 9px 22px; font-family: var(--font);
+    font-size:.95rem; cursor:pointer; transition: all .2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  #add-trip-btn:hover { background: #c96448; transform: translateY(-1px); }
+
+  /* Trip Cards */
+  #trip-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 18px; }
+  .trip-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 20px 20px 16px;
+    cursor: pointer; position: relative;
+    box-shadow: 0 2px 12px var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+    overflow: hidden;
+  }
+  .trip-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 16px 16px 0 0;
+  }
+  .trip-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px var(--shadow); }
+  .trip-card h3 { font-size: 1.05rem; margin-bottom: 10px; color: var(--text); }
+  .trip-card .dates { font-size: .82rem; color: var(--text-muted); line-height: 1.7; }
+  .trip-card .dates span { display: block; }
+  .trip-card .date-label { color: var(--primary); font-weight: 600; margin-right: 5px; }
+  .trip-card-del {
+    position: absolute; top: 12px; right: 12px;
+    background: none; border: none; cursor: pointer;
+    opacity: 0; transition: opacity .2s;
+    padding: 4px;
+  }
+  .trip-card:hover .trip-card-del { opacity: 1; }
+  .trip-card-del svg { width:16px;height:16px; color: #bbb; }
+  .trip-card-del:hover svg { color: var(--accent); }
+  .empty-state {
+    grid-column: 1/-1; text-align: center;
+    padding: 60px 20px; color: var(--text-muted); font-size: .95rem;
+  }
+  .empty-state .big { font-size: 3rem; margin-bottom: 12px; }
+
+  /* ── DETAIL VIEW ── */
+  #detail-view { display: none; padding: 0; }
+  #detail-view.active { display: block; }
+
+  /* Countdown Banner */
+  #countdown-banner {
+    background: linear-gradient(135deg, var(--primary) 0%, #2d4a70 100%);
+    color: #fff; padding: 18px 28px;
+    display: flex; align-items: center; gap: 20px;
+    flex-wrap: wrap;
+  }
+  #countdown-icon { width: 64px; height: 64px; flex-shrink: 0; }
+  #countdown-text { flex: 1; }
+  #countdown-label { font-size: .82rem; opacity: .75; margin-bottom: 3px; }
+  #countdown-time {
+    font-size: 1.8rem; font-weight: 600; letter-spacing: .06em;
+    font-variant-numeric: tabular-nums;
+  }
+  #countdown-tz { font-size: .75rem; opacity: .6; margin-top: 2px; }
+  #progress-area { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+  #progress-text { font-size: .82rem; opacity: .8; }
+  #progress-bar-wrap {
+    width: 160px; height: 8px;
+    background: rgba(255,255,255,.2); border-radius: 4px; overflow: hidden;
+  }
+  #progress-bar {
+    height: 100%; background: #E8F4D4;
+    border-radius: 4px; transition: width .4s ease;
+  }
+
+  /* Tabs */
+  #tab-bar {
+    display: flex; gap: 0;
+    background: var(--bg); border-bottom: 1.5px solid var(--border);
+    padding: 0 28px;
+  }
+  .tab-btn {
+    padding: 12px 24px; font-family: var(--font); font-size: .95rem;
+    background: none; border: none; cursor: pointer; color: var(--text-muted);
+    border-bottom: 2.5px solid transparent; margin-bottom: -1.5px;
+    transition: all .2s;
+  }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  /* Board */
+  #board-area { padding: 24px 28px; max-width: 1200px; margin: 0 auto; }
+  #add-note-btn {
+    margin-bottom: 22px;
+    background: none;
+    border: 2px dashed var(--primary-light);
+    border-radius: 12px; padding: 10px 22px;
+    font-family: var(--font); font-size: .92rem;
+    color: var(--primary); cursor: pointer;
+    transition: all .2s; display: flex; align-items: center; gap: 7px;
+  }
+  #add-note-btn:hover { background: rgba(61,90,128,.06); border-color: var(--primary); }
+  #notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+    gap: 20px; align-items: start;
+  }
+  .note-card { word-break: break-word; overflow-wrap: break-word; }
+
+  /* ── STICKY NOTE ── */
+  .note-card {
+    position: relative;
+    border-radius: 3px;
+    padding: 36px 20px 32px;
+    font-family: var(--font);
+    filter: drop-shadow(2px 4px 10px rgba(60,40,10,.15));
+    transition: filter .2s;
+    /* horizontal lines texture via repeating-linear-gradient */
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 23px,
+        rgba(0,0,0,.05) 23px,
+        rgba(0,0,0,.05) 24px
+      );
+  }
+  .note-card:hover { filter: drop-shadow(3px 6px 16px rgba(60,40,10,.22)); }
+
+  /* tape strip at top */
+  .note-tape {
+    position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+    width: 44px; height: 20px;
+    background: var(--tape);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    pointer-events: none;
+  }
+
+  /* curl bottom-right – added via appendChild */
+  .note-curl {
+    position: absolute; bottom: 0; right: 0;
+    width: 28px; height: 28px;
+    pointer-events: none;
+  }
+
+  .note-title-wrap { margin-bottom: 10px; position: relative; }
+  .note-title {
+    font-size: .97rem; font-weight: 600;
+    width: 100%; background: none; border: none;
+    font-family: var(--font); cursor: text; outline: none;
+    border-bottom: 1.5px dashed transparent;
+    padding: 2px 24px 2px 2px;
+    transition: border-color .2s;
+    line-height: 1.4;
+    word-break: break-all;
+  }
+  .note-title:focus { border-bottom-color: rgba(0,0,0,.2); }
+  .note-del-btn {
+    position: absolute; top: 0; right: 0;
+    background: none; border: none; cursor: pointer; padding: 3px;
+    opacity: .35; transition: opacity .2s;
+  }
+  .note-del-btn:hover { opacity: .9; }
+  .note-del-btn svg { width:14px;height:14px; }
+
+  /* Tasks */
+  .task-list { list-style: none; margin-bottom: 10px; }
+  .task-item {
+    display: flex; align-items: center; gap: 7px;
+    padding: 4px 0;
+    font-size: .88rem; line-height: 1.35;
+    border-bottom: 1px solid rgba(0,0,0,.04);
+  }
+  .task-check-btn {
+    flex-shrink: 0; width: 18px; height: 18px;
+    background: none; border: none; cursor: pointer; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .task-text-wrap { flex: 1; position: relative; min-width: 0; }
+  .task-text {
+    background: none; border: none; font-family: var(--font);
+    font-size: .88rem; width: 100%; outline: none;
+    cursor: text; padding: 0; line-height: 1.5;
+    transition: color .3s;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    display: block;
+  }
+  .task-text.done { color: rgba(0,0,0,.35); }
+  /* strikethrough animation */
+  .task-text-wrap::after {
+    content: '';
+    position: absolute; top: 50%; left: 0; right: 100%;
+    height: 1.5px; background: currentColor;
+    transition: right .5s ease; opacity: .5;
+    transform: translateY(-50%);
+  }
+  .task-text-wrap.done::after { right: 0; }
+  .task-date {
+    font-size: .73rem; opacity: .5; flex-shrink: 0; white-space: nowrap;
+  }
+  .task-date-input {
+    font-size: .73rem; opacity: .6; flex-shrink: 0;
+    background: none; border: none; font-family: var(--font);
+    cursor: pointer; outline: none; max-width: 80px; padding: 0;
+  }
+  .task-edit-btn, .task-del-btn {
+    flex-shrink: 0; width: 18px; height: 18px;
+    background: none; border: none; cursor: pointer; padding: 1px;
+    opacity: 0; transition: opacity .2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .task-item:hover .task-edit-btn,
+  .task-item:hover .task-del-btn { opacity: .5; }
+  .task-edit-btn:hover, .task-del-btn:hover { opacity: 1 !important; }
+  .task-edit-btn svg, .task-del-btn svg { width: 12px; height: 12px; }
+
+  /* Add task row */
+  .add-task-row {
+    display: flex; gap: 6px; margin-top: 4px;
+  }
+  .add-task-input {
+    flex: 1; background: rgba(255,255,255,.4);
+    border: 1px solid rgba(0,0,0,.12); border-radius: 6px;
+    padding: 5px 8px; font-family: var(--font); font-size: .85rem;
+    outline: none; transition: border-color .2s;
+  }
+  .add-task-input:focus { border-color: rgba(0,0,0,.3); }
+  .add-task-btn {
+    background: rgba(0,0,0,.08); border: none; border-radius: 6px;
+    padding: 5px 9px; cursor: pointer; font-family: var(--font);
+    font-size: .85rem; transition: background .2s;
+    display: flex; align-items: center;
+  }
+  .add-task-btn:hover { background: rgba(0,0,0,.15); }
+  .add-task-btn svg { width:13px;height:13px; }
+
+  /* Loading overlay */
+  #loading {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 16px;
+    transition: opacity .4s;
+  }
+  #loading.hidden { opacity: 0; pointer-events: none; }
+  #loading p { color: var(--text-muted); font-size: .9rem; }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SVG animations */
+  @keyframes walkLeg {
+    0%,100% { transform: rotate(-20deg); }
+    50% { transform: rotate(20deg); }
+  }
+  @keyframes planeFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  @keyframes trailFade {
+    0% { opacity: .6; }
+    100% { opacity: 0; }
+  }
+  @keyframes packItem {
+    from { opacity:0; transform: translateY(-6px) scale(.7); }
+    to { opacity:1; transform: none; }
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    #home-view, #board-area { padding: 18px 14px; }
+    #countdown-banner { padding: 14px 16px; }
+    #tab-bar { padding: 0 14px; }
+    #countdown-time { font-size: 1.35rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>加载中…</p>
+</div>
+
+<!-- ── HEADER ── -->
+<header id="app-header">
+  <button id="back-btn">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 3L5 8l5 5"/>
+    </svg>
+    返回
+  </button>
+  <h1>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+      <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+      <line x1="12" y1="12" x2="12" y2="12.01"/>
+    </svg>
+    出行准备清单
+  </h1>
+</header>
+
+<!-- ── HOME VIEW ── -->
+<div id="home-view">
+  <div id="home-top">
+    <h2>我的行程</h2>
+    <button id="add-trip-btn">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/>
+      </svg>
+      新建行程
+    </button>
+  </div>
+
+  <div id="new-trip-form">
+    <input id="trip-name-input" type="text" placeholder="行程名称（如：京都五日游）" />
+    <input id="trip-depart-input" type="date" />
+    <input id="trip-return-input" type="date" />
+    <div class="form-actions">
+      <button id="save-trip-btn" class="btn-primary">创建行程</button>
+      <button id="cancel-trip-btn" class="btn-ghost">取消</button>
+    </div>
+  </div>
+
+  <div id="trip-list">
+    <div class="empty-state">
+      <div class="big">✈️</div>
+      <p>还没有行程，点击「新建行程」开始吧</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── DETAIL VIEW ── -->
+<div id="detail-view">
+  <!-- Countdown -->
+  <div id="countdown-banner">
+    <svg id="countdown-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="countdown-text">
+      <div id="countdown-label">距出发还有</div>
+      <div id="countdown-time">--:--:--</div>
+      <div id="countdown-tz"></div>
+    </div>
+    <div id="progress-area">
+      <div id="progress-text">0 / 0 完成</div>
+      <div id="progress-bar-wrap"><div id="progress-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div id="tab-bar">
+    <button class="tab-btn active" data-tab="depart">✈️ 出发准备</button>
+    <button class="tab-btn" data-tab="return">🏠 回程准备</button>
+  </div>
+
+  <!-- Board -->
+  <div id="board-area">
+    <button id="add-note-btn">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/>
+      </svg>
+      添加便利贴
+    </button>
+    <div id="notes-grid"></div>
+  </div>
+</div>
+
+<!-- ── FIREBASE + APP JS ── -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+import {
+  getFirestore, collection, doc,
+  onSnapshot, setDoc, deleteDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBo3slfRfVtg64I_nCA_WJbwbEA7WFnrz4",
+  authDomain: "trip-prepare.firebaseapp.com",
+  projectId: "trip-prepare",
+  storageBucket: "trip-prepare.firebasestorage.app",
+  messagingSenderId: "233221673169",
+  appId: "1:233221673169:web:2e98d943c71050e00835f0",
+  measurementId: "G-46LDWWVHFS"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const analytics = getAnalytics(fbApp);
+const db = getFirestore(fbApp);
+
+/* ─── COLOR PALETTE ─── */
+const PALS = [
+  {bg:'#FEF8C0', color:'#4A3800', curl1:'#E8DA90', curl2:'#C8B860'},
+  {bg:'#FCE4EC', color:'#5A1828', curl1:'#EDCADA', curl2:'#C898AE'},
+  {bg:'#E9F5EA', color:'#183820', curl1:'#C8E8CA', curl2:'#90C095'},
+  {bg:'#E4F0FD', color:'#0A2848', curl1:'#C0D8F5', curl2:'#88B0DC'},
+  {bg:'#F3E5F5', color:'#381048', curl1:'#E0C8EC', curl2:'#B090C4'},
+  {bg:'#FFF0DE', color:'#402808', curl1:'#EED8B0', curl2:'#C8A878'},
+];
+
+/* ─── STATE ─── */
+let trips = {};          // { id: {name, departDate, returnDate} }
+let currentTripId = null;
+let currentTab = 'depart'; // 'depart' | 'return'
+let notes = {};           // { id: {title, palIdx, tasks:{id:{text,done,date}}} }
+let tripsUnsub = null;
+let notesUnsub = null;
+let countdownInterval = null;
+
+/* ─── REFS ─── */
+const $ = id => document.getElementById(id);
+const homeView = $('home-view');
+const detailView = $('detail-view');
+const backBtn = $('back-btn');
+const tripList = $('trip-list');
+const addTripBtn = $('add-trip-btn');
+const newTripForm = $('new-trip-form');
+const tripNameInput = $('trip-name-input');
+const tripDepartInput = $('trip-depart-input');
+const tripReturnInput = $('trip-return-input');
+const saveTripBtn = $('save-trip-btn');
+const cancelTripBtn = $('cancel-trip-btn');
+const notesGrid = $('notes-grid');
+const addNoteBtn = $('add-note-btn');
+const countdownIcon = $('countdown-icon');
+const countdownLabel = $('countdown-label');
+const countdownTime = $('countdown-time');
+const countdownTz = $('countdown-tz');
+const progressText = $('progress-text');
+const progressBar = $('progress-bar');
+const loadingEl = $('loading');
+
+/* ─── HELPERS ─── */
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+function fmtDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  return `${m}月${day}日`;
+}
+function pad2(n) { return String(n).padStart(2,'0'); }
+
+/* ─── FIRESTORE ─── */
+async function loadTrips() {
+  if (tripsUnsub) tripsUnsub();
+  const col = collection(db, 'trips');
+  tripsUnsub = onSnapshot(col, snap => {
+    trips = {};
+    snap.forEach(d => { trips[d.id] = d.data(); });
+    renderTripList();
+  });
 }
 
-function walkingSVG(){
-  return`<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .wl1{transform-origin:17px 28px;animation:wla 0.65s ease-in-out infinite alternate}
-      .wl2{transform-origin:21px 28px;animation:wlb 0.65s ease-in-out infinite alternate}
-      .wb{animation:wbob 0.65s ease-in-out infinite alternate}
-      @keyframes wla{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
-      @keyframes wlb{from{transform:rotate(16deg)}to{transform:rotate(-16deg)}}
-      @keyframes wbob{from{transform:translateY(0)}to{transform:translateY(-1.5px)}}
-    </style>
-    <g class="wb">
-      <circle cx="14" cy="7" r="4" fill="#b85c3a"/>
-      <rect x="9" y="12" width="10" height="11" rx="2" fill="#b85c3a"/>
-      <line x1="19" y1="15" x2="26" y2="19" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
-      <line x1="9" y1="15" x2="4" y2="21" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/>
-    </g>
-    <g class="wl1"><line x1="12" y1="23" x2="9" y2="36" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/></g>
-    <g class="wl2"><line x1="17" y1="23" x2="20" y2="36" stroke="#b85c3a" stroke-width="2.2" stroke-linecap="round"/></g>
-    <!-- suitcase closed -->
-    <rect x="24" y="20" width="16" height="12" rx="2" fill="#e8a060" stroke="#b85c3a" stroke-width="1.2"/>
-    <line x1="32" y1="20" x2="32" y2="32" stroke="#b85c3a" stroke-width=".8"/>
-    <line x1="24" y1="26" x2="40" y2="26" stroke="#b85c3a" stroke-width=".8"/>
-    <rect x="29" y="18" width="6" height="3" rx="1" fill="#b85c3a"/>
-    <circle cx="27" cy="33" r="1.8" fill="#b85c3a"/>
-    <circle cx="37" cy="33" r="1.8" fill="#b85c3a"/>
-    <line x1="26" y1="18.5" x2="26" y2="20" stroke="#b85c3a" stroke-width="1.4" stroke-linecap="round"/>
-  </svg>`;
+async function saveTrip(id, data) {
+  try {
+    await setDoc(doc(db, 'trips', id), data, {merge: true});
+    console.log('✅ saveTrip OK', id, data);
+  } catch(e) {
+    console.error('❌ saveTrip failed:', e.code, e.message);
+    alert(`保存失败：${e.message}\n\n请检查 Firestore 安全规则是否允许写入。`);
+  }
+}
+async function removeTrip(id) {
+  // delete all notes subcollections too
+  const cols = ['notes_depart','notes_return'];
+  for (const c of cols) {
+    const snap = await getDocs(collection(db,'trips',id,c));
+    for (const d of snap.docs) await deleteDoc(d.ref);
+  }
+  await deleteDoc(doc(db,'trips',id));
 }
 
-function flyingSVG(){
-  return`<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .plane{animation:flyup 1.8s ease-in-out infinite}
-      .trail1{animation:fade1 1.8s ease-in-out infinite}
-      .trail2{animation:fade2 1.8s ease-in-out infinite}
-      @keyframes flyup{0%{transform:translate(0,4px)}50%{transform:translate(3px,-3px)}100%{transform:translate(0,4px)}}
-      @keyframes fade1{0%,100%{opacity:.15}50%{opacity:.55}}
-      @keyframes fade2{0%,100%{opacity:.08}40%{opacity:.35}}
-    </style>
-    <g class="trail2"><path d="M4 36 Q12 30 18 28" stroke="#b85c3a" stroke-width="1.2" fill="none" stroke-dasharray="2 2"/></g>
-    <g class="trail1"><path d="M8 38 Q16 33 22 30" stroke="#b85c3a" stroke-width="1" fill="none" stroke-dasharray="2 3"/></g>
-    <g class="plane">
-      <path d="M10 28 L30 14 L34 18 L20 26 L22 34 L16 30 Z" fill="#b85c3a"/>
-      <path d="M22 20 L36 16 L34 20 Z" fill="#b85c3a" opacity=".7"/>
-      <circle cx="26" cy="18" r="1.5" fill="white" opacity=".8"/>
-    </g>
-  </svg>`;
+function getNoteCol(tripId, tab) {
+  return collection(db, 'trips', tripId, `notes_${tab}`);
+}
+async function saveNote(tripId, tab, noteId, data) {
+  await setDoc(doc(db,'trips',tripId,`notes_${tab}`,noteId), data, {merge:true});
+}
+async function removeNote(tripId, tab, noteId) {
+  await deleteDoc(doc(db,'trips',tripId,`notes_${tab}`,noteId));
 }
 
-function updateIcon(){
-  const state=getIconState();
-  const el=document.getElementById('cd-icon');
-  if(state==='flying'){el.innerHTML=flyingSVG();return}
-  if(state==='walking'){el.innerHTML=walkingSVG();return}
-  const filled=parseInt(state.split(':')[1])||0;
-  el.innerHTML=packingSVG(filled);
+function subscribeNotes(tripId, tab) {
+  if (notesUnsub) notesUnsub();
+  notesUnsub = onSnapshot(getNoteCol(tripId, tab), snap => {
+    notes = {};
+    snap.forEach(d => { notes[d.id] = d.data(); });
+    renderNotes();
+    updateProgress();
+    updateCountdownIcon();
+  });
 }
 
-function checkSVG(done,color){
-  if(done)return`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="13" height="13" rx="3" fill="${color}" stroke="${color}" stroke-width="1"/><polyline points="4,8 7,11 12,5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  return`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="13" height="13" rx="3" stroke="${color}" stroke-width="1.2" stroke-dasharray="2.5 1.5" opacity=".5"/></svg>`;
-}
-function editSVG(c){return`<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 2 L11 4 L4 11 L1.5 11.5 L2 9 Z" stroke="${c}" stroke-width="1.2" stroke-linejoin="round"/><path d="M7.5 3.5 L9.5 5.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/></svg>`}
-function delSVG(c){return`<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 3.5 L10.5 3.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><path d="M5 3.5 V2.5 H8 V3.5" stroke="${c}" stroke-width="1.1" stroke-linejoin="round"/><path d="M3.5 3.5 L4 11 H9 L9.5 3.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+/* ─── RENDER HOME ─── */
+function renderTripList() {
+  const ids = Object.keys(trips);
+  if (ids.length === 0) {
+    tripList.innerHTML = `<div class="empty-state"><div class="big">✈️</div><p>还没有行程，点击「新建行程」开始吧</p></div>`;
+    return;
+  }
+  tripList.innerHTML = '';
+  ids.sort((a,b)=> (trips[a].departDate||'') < (trips[b].departDate||'') ? -1:1)
+  .forEach(id => {
+    const t = trips[id];
+    const card = document.createElement('div');
+    card.className = 'trip-card';
+    card.dataset.id = id;
 
-function curlEl(p){
-  const s=32;
-  const el=document.createElement('div');
-  el.className='curl-svg';
-  el.style.cssText=`position:absolute;bottom:0;right:0;z-index:5;pointer-events:none;width:${s}px;height:${s}px`;
-  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.setAttribute('viewBox',`0 0 ${s} ${s}`);
-  svg.setAttribute('width',s);svg.setAttribute('height',s);
-  svg.setAttribute('xmlns','http://www.w3.org/2000/svg');
-  svg.innerHTML=`
-    <defs><linearGradient id="cg${p.pal}" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${p.curl1}"/><stop offset="100%" stop-color="${p.curl2}"/></linearGradient></defs>
-    <path d="M0 ${s} L${s} ${s} L${s} 0 Q${s} ${s} 0 ${s} Z" fill="${p.curl1}"/>
-    <path d="M${s*.08} ${s} Q${s*.58} ${s*.82} ${s} ${s*.08} L${s} ${s} Z" fill="${p.curl2}" opacity=".75"/>
-    <path d="M${s*.12} ${s} Q${s*.6} ${s*.8} ${s} ${s*.12}" stroke="rgba(0,0,0,.13)" stroke-width="1" fill="none"/>`;
-  el.appendChild(svg);
+    const h3 = document.createElement('h3');
+    h3.textContent = t.name || '未命名行程';
+    card.appendChild(h3);
+
+    const dates = document.createElement('div');
+    dates.className = 'dates';
+    const d1 = document.createElement('span');
+    d1.innerHTML = `<span class="date-label">出发</span>${fmtDate(t.departDate) || '未设置'}`;
+    const d2 = document.createElement('span');
+    d2.innerHTML = `<span class="date-label">返程</span>${fmtDate(t.returnDate) || '未设置'}`;
+    dates.appendChild(d1); dates.appendChild(d2);
+    card.appendChild(dates);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'trip-card-del';
+    delBtn.title = '删除行程';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 16 16');
+    svg.setAttribute('fill','none');
+    svg.setAttribute('stroke','currentColor');
+    svg.setAttribute('stroke-width','2');
+    svg.setAttribute('stroke-linecap','round');
+    const p1 = document.createElementNS('http://www.w3.org/2000/svg','line');
+    p1.setAttribute('x1','3');p1.setAttribute('y1','3');p1.setAttribute('x2','13');p1.setAttribute('y2','13');
+    const p2 = document.createElementNS('http://www.w3.org/2000/svg','line');
+    p2.setAttribute('x1','13');p2.setAttribute('y1','3');p2.setAttribute('x2','3');p2.setAttribute('y2','13');
+    svg.appendChild(p1); svg.appendChild(p2);
+    delBtn.appendChild(svg);
+    card.appendChild(delBtn);
+
+    card.addEventListener('click', () => openTrip(id));
+    delBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (confirm(`确认删除「${t.name}」？此操作不可恢复。`)) removeTrip(id);
+    });
+    tripList.appendChild(card);
+  });
+}
+
+/* ─── OPEN TRIP ─── */
+function openTrip(id) {
+  currentTripId = id;
+  currentTab = 'depart';
+  homeView.style.display = 'none';
+  detailView.style.display = 'block';
+  backBtn.style.display = 'flex';
+
+  const t = trips[id];
+  document.title = `${t.name} — 出行准备`;
+
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === 'depart');
+  });
+
+  updateCountdownLabel();
+  startCountdown();
+  subscribeNotes(id, currentTab);
+}
+
+function closeTrip() {
+  currentTripId = null;
+  if (notesUnsub) { notesUnsub(); notesUnsub = null; }
+  if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+  homeView.style.display = 'block';
+  detailView.style.display = 'none';
+  backBtn.style.display = 'none';
+  document.title = '出行准备清单';
+}
+
+/* ─── COUNTDOWN ─── */
+function getTargetDate() {
+  if (!currentTripId) return null;
+  const t = trips[currentTripId];
+  const ds = currentTab === 'depart' ? t.departDate : t.returnDate;
+  if (!ds) return null;
+  return new Date(ds + 'T00:00:00');
+}
+
+function updateCountdownLabel() {
+  countdownLabel.textContent = currentTab === 'depart' ? '距出发还有' : '距返程还有';
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  countdownTz.textContent = `时区：${tz}`;
+}
+
+function startCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+  function tick() {
+    const target = getTargetDate();
+    if (!target) { countdownTime.textContent = '日期未设置'; return; }
+    const diff = target - Date.now();
+    if (diff <= 0) { countdownTime.textContent = '已出发 🎉'; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    countdownTime.textContent = d > 0
+      ? `${d}天 ${pad2(h)}:${pad2(m)}:${pad2(s)}`
+      : `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+  }
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+
+/* ─── COUNTDOWN ICON ─── */
+function updateCountdownIcon() {
+  if (currentTab === 'depart') {
+    updateDepartIcon();
+  } else {
+    updateReturnIcon();
+  }
+}
+
+function updateDepartIcon() {
+  // detect "packing" note and "takeoff" task
+  let packingNote = null;
+  let allPackDone = false;
+  let takeoffDone = false;
+
+  for (const [nid, note] of Object.entries(notes)) {
+    const title = (note.title||'').toLowerCase();
+    if (/打包|行李|pack|luggage|箱|suitcase/.test(title)) {
+      packingNote = note;
+      const tasks = Object.values(note.tasks||{});
+      if (tasks.length > 0 && tasks.every(t=>t.done)) allPackDone = true;
+    }
+    for (const task of Object.values(note.tasks||{})) {
+      if (/起飞|takeoff|登机|boarding|出发|飞机/.test(task.text||'') && task.done) {
+        takeoffDone = true;
+      }
+    }
+  }
+
+  if (takeoffDone) { drawPlaneIcon(); return; }
+  if (allPackDone && packingNote) { drawWalkingIcon(); return; }
+  if (packingNote) {
+    const tasks = Object.values(packingNote.tasks||{});
+    const done = tasks.filter(t=>t.done).length;
+    drawPackingIcon(done, tasks.length);
+    return;
+  }
+  drawStandingIcon();
+}
+
+function updateReturnIcon() {
+  // Phase 1: no notes or no shopping note → walking person (heading home)
+  // Phase 2: detect "购物|战利品|buy|shop|纪念品|souven" note → fill luggage with items
+  // Phase 3: all shopping done → paper plane (return flight)
+  let shoppingNote = null;
+  let allShopDone = false;
+  let returnFlightDone = false;
+
+  for (const [nid, note] of Object.entries(notes)) {
+    const title = (note.title||'').toLowerCase();
+    if (/购物|战利品|buy|shop|纪念品|souven|购买|伴手礼/.test(title)) {
+      shoppingNote = note;
+      const tasks = Object.values(note.tasks||{});
+      if (tasks.length > 0 && tasks.every(t=>t.done)) allShopDone = true;
+    }
+    for (const task of Object.values(note.tasks||{})) {
+      if (/回程|返程|return|飞机|起飞|登机|boarding/.test(task.text||'') && task.done) {
+        returnFlightDone = true;
+      }
+    }
+  }
+
+  if (returnFlightDone) { drawPlaneIcon(); return; }
+  if (shoppingNote) {
+    const tasks = Object.values(shoppingNote.tasks||{});
+    const done = tasks.filter(t=>t.done).length;
+    // stay on phase 2 even when all done — only returnFlightDone triggers phase 3
+    drawReturnShoppingIcon(done, tasks.length);
+    return;
+  }
+  drawReturnWalkingIcon();
+}
+
+function clearIcon() {
+  while (countdownIcon.firstChild) countdownIcon.removeChild(countdownIcon.firstChild);
+}
+
+function makeSvgEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
   return el;
 }
 
-function updateOverall(){
-  let tot=0,don=0;
-  data.forEach(s=>s.tasks.forEach(t=>{tot++;if(t.done)don++;}));
-  const pct=tot?Math.round(don/tot*100):0;
-  document.getElementById('ov-fill').style.width=pct+'%';
-  document.getElementById('ov-pct').textContent=pct+'%';
-  updateIcon();
+function drawStandingIcon() {
+  clearIcon();
+  // head
+  countdownIcon.appendChild(makeSvgEl('circle',{cx:'32',cy:'14',r:'6',fill:'#E8D5B7',stroke:'#C4A882','stroke-width':'1.5'}));
+  // body
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'32',y1:'20',x2:'32',y2:'38',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
+  // arms
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'20',y1:'28',x2:'44',y2:'28',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
+  // legs
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'32',y1:'38',x2:'22',y2:'52',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'32',y1:'38',x2:'42',y2:'52',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
 }
 
-function renderGrid(){
-  const grid=document.getElementById('sticky-grid');
-  grid.innerHTML='';
-  data.forEach(sec=>{
-    const p={...PALS[sec.pal%PALS.length],pal:sec.pal};
-    const doneN=sec.tasks.filter(t=>t.done).length;
-    const pct=sec.tasks.length?Math.round(doneN/sec.tasks.length*100):0;
+function drawPackingIcon(done, total) {
+  clearIcon();
+  // suitcase outline open
+  countdownIcon.appendChild(makeSvgEl('rect',{x:'14',y:'30',width:'36',height:'26',rx:'3',fill:'#C8A878',stroke:'#8B6A3E','stroke-width':'1.5'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'14',y1:'30',x2:'50',y2:'30',stroke:'#8B6A3E','stroke-width':'2.5'}));
+  // handle
+  countdownIcon.appendChild(makeSvgEl('path',{d:'M26 30 Q32 24 38 30',fill:'none',stroke:'#8B6A3E','stroke-width':'1.5'}));
+  // items in box
+  const colors = ['#E07A5F','#3D5A80','#81B29A','#F2CC8F','#6B4226','#A8C5E8'];
+  const packDone = Math.min(done, total);
+  for (let i = 0; i < packDone; i++) {
+    const x = 18 + (i % 4) * 8;
+    const y = 37 + Math.floor(i/4) * 8;
+    const rect = makeSvgEl('rect',{x:String(x),y:String(y),width:'6',height:'6',rx:'1',fill:colors[i%colors.length],opacity:'0'});
+    countdownIcon.appendChild(rect);
+    // animate in
+    rect.style.animation = `packItem .3s ${i*.08}s forwards`;
+  }
+  // standing person arm pointing down
+  countdownIcon.appendChild(makeSvgEl('circle',{cx:'32',cy:'10',r:'5',fill:'#E8D5B7',stroke:'#C4A882','stroke-width':'1.2'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'32',y1:'15',x2:'32',y2:'27',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'32',y1:'20',x2:'24',y2:'26',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'32',y1:'20',x2:'40',y2:'26',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+}
 
-    const sticky=document.createElement('div');
-    sticky.className='sticky';
-    sticky.style.cssText=`background:${p.bg};color:${p.color}`;
+function drawWalkingIcon() {
+  clearIcon();
+  // suitcase closed on wheels
+  const g = makeSvgEl('g',{});
+  g.appendChild(makeSvgEl('rect',{x:'36',y:'28',width:'20',height:'22',rx:'3',fill:'#C8A878',stroke:'#8B6A3E','stroke-width':'1.5'}));
+  g.appendChild(makeSvgEl('line',{x1:'36',y1:'35',x2:'56',y2:'35',stroke:'#8B6A3E','stroke-width':'1.5'}));
+  g.appendChild(makeSvgEl('circle',{cx:'39',cy:'51',r:'2.5',fill:'#666'}));
+  g.appendChild(makeSvgEl('circle',{cx:'53',cy:'51',r:'2.5',fill:'#666'}));
+  g.appendChild(makeSvgEl('path',{d:'M43 28 Q46 22 49 28',fill:'none',stroke:'#8B6A3E','stroke-width':'1.5'}));
+  countdownIcon.appendChild(g);
 
-    // tape
-    const tape=document.createElement('div');tape.className='tape';
-    sticky.appendChild(tape);
+  // walking person
+  countdownIcon.appendChild(makeSvgEl('circle',{cx:'22',cy:'12',r:'6',fill:'#E8D5B7',stroke:'#C4A882','stroke-width':'1.5'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'22',y1:'18',x2:'22',y2:'36',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
+  // arm holding handle
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'22',y1:'25',x2:'36',y2:'38',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'22',y1:'25',x2:'14',y2:'32',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
 
-    // texture
-    const tex=document.createElement('div');tex.className='texture-overlay';
-    sticky.appendChild(tex);
+  // animated legs
+  const legL = makeSvgEl('line',{x1:'22',y1:'36',x2:'14',y2:'52',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'});
+  legL.style.transformOrigin = '22px 36px';
+  legL.style.animation = 'walkLeg .6s ease-in-out infinite';
+  const legR = makeSvgEl('line',{x1:'22',y1:'36',x2:'30',y2:'52',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'});
+  legR.style.transformOrigin = '22px 36px';
+  legR.style.animation = 'walkLeg .6s ease-in-out infinite reverse';
+  countdownIcon.appendChild(legL);
+  countdownIcon.appendChild(legR);
+}
 
-    // inner wrapper (z-index above texture)
-    const inner=document.createElement('div');inner.className='sticky-inner';
-
-    // header
-    const hdr=document.createElement('div');hdr.className='sticky-header';
-    const inp=document.createElement('input');
-    inp.className='sticky-title';inp.type='text';inp.value=sec.label;inp.style.color=p.color;
-    inp.onchange=()=>{sec.label=inp.value.trim()||sec.label};
-    inp.onblur=()=>{if(!inp.value.trim())inp.value=sec.label};
-    const frac=document.createElement('span');frac.className='sticky-frac';frac.textContent=`${doneN}/${sec.tasks.length}`;
-    hdr.appendChild(inp);hdr.appendChild(frac);
-    inner.appendChild(hdr);
-
-    // mini bar
-    const mb=document.createElement('div');mb.className='mini-bar';
-    const mf=document.createElement('div');mf.className='mini-fill';mf.style.width=pct+'%';
-    mb.appendChild(mf);inner.appendChild(mb);
-
-    // tasks
-    const tl=document.createElement('div');tl.className='task-list';
-    sec.tasks.forEach(task=>{
-      const item=document.createElement('div');item.className='task-item';
-
-      const chk=document.createElement('span');
-      chk.className='ti-chk';chk.innerHTML=checkSVG(task.done,p.color);
-      chk.addEventListener('click',e=>{
-        e.stopPropagation();
-        task.done=!task.done;
-        renderGrid();updateOverall();
-      });
-
-      const right=document.createElement('div');right.className='ti-right';
-      const lbl=document.createElement('span');
-      lbl.className='ti-lbl'+(task.done?' done':'');
-      lbl.textContent=task.text;
-      const dt=document.createElement('span');dt.className='ti-dt';dt.textContent=fmtDate(task.date);
-      right.appendChild(lbl);right.appendChild(dt);
-
-      const acts=document.createElement('div');acts.className='ti-acts';
-      const eBtn=document.createElement('button');eBtn.className='ti-btn';
-      eBtn.innerHTML=editSVG(p.color);
-      eBtn.addEventListener('click',e=>{e.stopPropagation();openEdit(task,sec)});
-      const dBtn=document.createElement('button');dBtn.className='ti-btn';
-      dBtn.innerHTML=delSVG(p.color);
-      dBtn.addEventListener('click',e=>{
-        e.stopPropagation();
-        sec.tasks=sec.tasks.filter(t=>t.id!==task.id);
-        renderGrid();updateOverall();
-      });
-      acts.appendChild(eBtn);acts.appendChild(dBtn);
-
-      item.appendChild(chk);item.appendChild(right);item.appendChild(acts);
-      tl.appendChild(item);
+function drawPlaneIcon() {
+  clearIcon();
+  // paper plane body - pointing upper-right
+  const g = makeSvgEl('g',{transform:'translate(32,32) rotate(-30) translate(-32,-32)'});
+  g.style.animation = 'planeFloat 1.8s ease-in-out infinite';
+  // main body triangle
+  g.appendChild(makeSvgEl('path',{d:'M12 32 L52 20 L38 52 Z',fill:'#E8F4FF',stroke:'#5B8FBD','stroke-width':'1.5','stroke-linejoin':'round'}));
+  // fold crease line
+  g.appendChild(makeSvgEl('line',{x1:'12',y1:'32',x2:'38',y2:'36',stroke:'#5B8FBD','stroke-width':'1.2',opacity:'.6'}));
+  // bottom fold
+  g.appendChild(makeSvgEl('path',{d:'M12 32 L38 36 L38 52 Z',fill:'#BDD9F0','stroke-width':'0',opacity:'.7'}));
+  countdownIcon.appendChild(g);
+  // dotted flight trail
+  for (let i = 0; i < 4; i++) {
+    const dot = makeSvgEl('circle',{
+      cx: String(10 - i*5), cy: String(40 + i*3),
+      r:'2', fill:'#98C1D9', opacity:'0'
     });
-    inner.appendChild(tl);
+    dot.style.animation = `trailFade 1s ${i*.18}s ease-out infinite`;
+    countdownIcon.appendChild(dot);
+  }
+}
 
-    // add row
-    const ar=document.createElement('div');ar.className='add-row';
-    const ai=document.createElement('input');ai.className='add-inp';ai.type='text';ai.placeholder='添加任务…';
-    const ad=document.createElement('input');ad.className='add-dt';ad.type='date';
-    const ag=document.createElement('button');ag.className='add-go';ag.textContent='＋';ag.style.color=p.color;
-    ag.addEventListener('click',()=>doAdd(sec,ai,ad));
-    ai.addEventListener('keydown',e=>{if(e.key==='Enter')doAdd(sec,ai,ad)});
-    ar.appendChild(ai);ar.appendChild(ad);ar.appendChild(ag);
-    inner.appendChild(ar);
+/* ─── RETURN TAB ICONS ─── */
 
-    sticky.appendChild(inner);
-    sticky.appendChild(curlEl(p)); // append curl as DOM node — events stay intact
-    grid.appendChild(sticky);
+// Phase 1: walking person dragging empty suitcase (heading home)
+function drawReturnWalkingIcon() {
+  clearIcon();
+  // suitcase being dragged (right side, smaller)
+  const sc = makeSvgEl('g',{});
+  sc.appendChild(makeSvgEl('rect',{x:'38',y:'30',width:'18',height:'20',rx:'3',fill:'#98C1D9',stroke:'#5B8FBD','stroke-width':'1.5'}));
+  sc.appendChild(makeSvgEl('line',{x1:'38',y1:'36',x2:'56',y2:'36',stroke:'#5B8FBD','stroke-width':'1.2'}));
+  sc.appendChild(makeSvgEl('path',{d:'M42 30 Q47 25 52 30',fill:'none',stroke:'#5B8FBD','stroke-width':'1.3'}));
+  sc.appendChild(makeSvgEl('circle',{cx:'41',cy:'51',r:'2',fill:'#5B8FBD'}));
+  sc.appendChild(makeSvgEl('circle',{cx:'53',cy:'51',r:'2',fill:'#5B8FBD'}));
+  countdownIcon.appendChild(sc);
+
+  // person walking left → right
+  countdownIcon.appendChild(makeSvgEl('circle',{cx:'22',cy:'12',r:'6',fill:'#E8D5B7',stroke:'#C4A882','stroke-width':'1.5'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'22',y1:'18',x2:'22',y2:'36',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'}));
+  // arm reaching to pull suitcase
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'22',y1:'24',x2:'38',y2:'38',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  // other arm swinging
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'22',y1:'24',x2:'13',y2:'32',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  // animated legs
+  const legL = makeSvgEl('line',{x1:'22',y1:'36',x2:'14',y2:'52',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'});
+  legL.style.transformOrigin = '22px 36px';
+  legL.style.animation = 'walkLeg .6s ease-in-out infinite';
+  const legR = makeSvgEl('line',{x1:'22',y1:'36',x2:'30',y2:'52',stroke:'#5B8FBD','stroke-width':'3','stroke-linecap':'round'});
+  legR.style.transformOrigin = '22px 36px';
+  legR.style.animation = 'walkLeg .6s ease-in-out infinite reverse';
+  countdownIcon.appendChild(legL);
+  countdownIcon.appendChild(legR);
+}
+
+// Phase 2: suitcase filling up with shopping items as tasks complete
+function drawReturnShoppingIcon(done, total) {
+  clearIcon();
+  // open suitcase
+  countdownIcon.appendChild(makeSvgEl('rect',{x:'12',y:'28',width:'40',height:'28',rx:'3',fill:'#98C1D9',stroke:'#5B8FBD','stroke-width':'1.5'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'12',y1:'28',x2:'52',y2:'28',stroke:'#5B8FBD','stroke-width':'2.5'}));
+  countdownIcon.appendChild(makeSvgEl('path',{d:'M22 28 Q32 22 42 28',fill:'none',stroke:'#5B8FBD','stroke-width':'1.5'}));
+  countdownIcon.appendChild(makeSvgEl('circle',{cx:'17',cy:'57',r:'2.5',fill:'#3D5A80'}));
+  countdownIcon.appendChild(makeSvgEl('circle',{cx:'47',cy:'57',r:'2.5',fill:'#3D5A80'}));
+
+  // items inside (shopping bag shapes + small boxes)
+  const itemShapes = [
+    // shopping bag
+    (x, y, c) => {
+      const g = makeSvgEl('g',{});
+      g.appendChild(makeSvgEl('rect',{x:String(x),y:String(y),width:'7',height:'8',rx:'1',fill:c}));
+      g.appendChild(makeSvgEl('path',{d:`M${x+1} ${y} Q${x+3.5} ${y-3} ${x+6} ${y}`,fill:'none',stroke:c,'stroke-width':'1'}));
+      return g;
+    },
+    // small gift box
+    (x, y, c) => {
+      const g = makeSvgEl('g',{});
+      g.appendChild(makeSvgEl('rect',{x:String(x),y:String(y),width:'8',height:'7',rx:'1',fill:c}));
+      g.appendChild(makeSvgEl('line',{x1:String(x+4),y1:String(y),x2:String(x+4),y2:String(y+7),stroke:'white','stroke-width':'1',opacity:'.6'}));
+      return g;
+    },
+    // round item
+    (x, y, c) => makeSvgEl('circle',{cx:String(x+4),cy:String(y+4),r:'4',fill:c}),
+    // flat item
+    (x, y, c) => makeSvgEl('rect',{x:String(x),y:String(y+2),width:'10',height:'5',rx:'1',fill:c}),
+  ];
+  const colors = ['#E07A5F','#F2CC8F','#81B29A','#3D5A80','#C898AE','#B090C4'];
+  const positions = [{x:15,y:35},{x:24,y:36},{x:34,y:34},{x:14,y:44},{x:24,y:45},{x:35,y:44}];
+
+  for (let i = 0; i < Math.min(done, positions.length); i++) {
+    const {x, y} = positions[i];
+    const shape = itemShapes[i % itemShapes.length](x, y, colors[i % colors.length]);
+    shape.style.animation = `packItem .3s ${i * .08}s forwards`;
+    if (shape.tagName !== 'g') { shape.setAttribute('opacity','0'); }
+    else { shape.querySelectorAll('*').forEach(el => {}); shape.style.opacity = '0'; }
+    countdownIcon.appendChild(shape);
+  }
+
+  // person standing to the side looking pleased
+  countdownIcon.appendChild(makeSvgEl('circle',{cx:'56',cy:'14',r:'5',fill:'#E8D5B7',stroke:'#C4A882','stroke-width':'1.2'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'56',y1:'19',x2:'56',y2:'30',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'56',y1:'23',x2:'50',y2:'28',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'56',y1:'23',x2:'62',y2:'27',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'56',y1:'30',x2:'52',y2:'38',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+  countdownIcon.appendChild(makeSvgEl('line',{x1:'56',y1:'30',x2:'60',y2:'38',stroke:'#5B8FBD','stroke-width':'2.5','stroke-linecap':'round'}));
+}
+
+/* ─── RENDER NOTES ─── */
+function renderNotes() {
+  notesGrid.innerHTML = '';
+  const sorted = Object.entries(notes).sort((a,b)=> (a[1].createdAt||0)-(b[1].createdAt||0));
+  if (sorted.length === 0) {
+    const emp = document.createElement('div');
+    emp.style.cssText = 'color:var(--text-muted);font-size:.9rem;padding:20px 0;';
+    emp.textContent = '还没有便利贴，点击上方按钮添加吧 ✨';
+    notesGrid.appendChild(emp);
+    return;
+  }
+  sorted.forEach(([nid, note]) => {
+    notesGrid.appendChild(buildNoteEl(nid, note));
   });
-  updateOverall();
 }
 
-function doAdd(sec,inp,di){
-  const text=inp.value.trim();if(!text)return;
-  sec.tasks.push({id:uid(),text,date:di.value||'',done:false});
-  inp.value='';di.value='';
-  renderGrid();updateOverall();
+function buildNoteEl(nid, note) {
+  const pal = PALS[note.palIdx || 0];
+  const card = document.createElement('div');
+  card.className = 'note-card';
+  card.dataset.id = nid;
+  card.style.backgroundColor = pal.bg;
+  card.style.color = pal.color;
+
+  // tape
+  const tape = document.createElement('div');
+  tape.className = 'note-tape';
+  card.appendChild(tape);
+
+  // title row
+  const titleWrap = document.createElement('div');
+  titleWrap.className = 'note-title-wrap';
+
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.className = 'note-title';
+  titleInput.value = note.title || '便利贴';
+  titleInput.style.color = pal.color;
+  titleInput.addEventListener('change', () => {
+    saveNote(currentTripId, currentTab, nid, {title: titleInput.value});
+  });
+  titleWrap.appendChild(titleInput);
+
+  const delNoteBtn = document.createElement('button');
+  delNoteBtn.className = 'note-del-btn';
+  delNoteBtn.title = '删除便利贴';
+  delNoteBtn.style.color = pal.color;
+  delNoteBtn.appendChild(buildSvgX());
+  delNoteBtn.addEventListener('click', () => {
+    if (confirm('确认删除这张便利贴？')) removeNote(currentTripId, currentTab, nid);
+  });
+  titleWrap.appendChild(delNoteBtn);
+  card.appendChild(titleWrap);
+
+  // task list
+  const taskList = document.createElement('ul');
+  taskList.className = 'task-list';
+  const tasks = Object.entries(note.tasks||{}).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  tasks.forEach(([tid, task]) => {
+    taskList.appendChild(buildTaskEl(nid, tid, task, pal));
+  });
+  card.appendChild(taskList);
+
+  // add task row
+  const addRow = document.createElement('div');
+  addRow.className = 'add-task-row';
+  const addInput = document.createElement('input');
+  addInput.type = 'text';
+  addInput.className = 'add-task-input';
+  addInput.placeholder = '新任务…';
+  addInput.style.color = pal.color;
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-task-btn';
+  addBtn.style.color = pal.color;
+  addBtn.appendChild(buildSvgPlus());
+  const doAdd = () => {
+    const txt = addInput.value.trim();
+    if (!txt) return;
+    if (Object.keys(notes[nid]?.tasks || {}).length >= 15) {
+      alert('该便利贴最多15条任务');
+      return;
+    }
+    const tid = uid();
+    const updated = { ...(notes[nid]?.tasks || {}), [tid]: { text:txt, done:false, date:'', order: Date.now() } };
+    saveNote(currentTripId, currentTab, nid, { tasks: updated });
+    addInput.value = '';
+  };
+  addBtn.addEventListener('click', doAdd);
+  addInput.addEventListener('keydown', e => { if (e.key==='Enter') doAdd(); });
+  addRow.appendChild(addInput);
+  addRow.appendChild(addBtn);
+  card.appendChild(addRow);
+
+  // curl – via appendChild, NOT innerHTML+=
+  const curl = document.createElement('div');
+  curl.className = 'note-curl';
+  const curlSvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  curlSvg.setAttribute('viewBox','0 0 28 28');
+  curlSvg.setAttribute('width','28');
+  curlSvg.setAttribute('height','28');
+  // shadow triangle
+  const shadow = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  shadow.setAttribute('points','0,28 28,0 28,28');
+  shadow.setAttribute('fill','rgba(0,0,0,.12)');
+  curlSvg.appendChild(shadow);
+  // curl layer 1
+  const c1 = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  c1.setAttribute('points','4,28 28,4 28,28');
+  c1.setAttribute('fill', pal.curl1);
+  curlSvg.appendChild(c1);
+  // curl layer 2
+  const c2 = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  c2.setAttribute('points','14,28 28,14 28,28');
+  c2.setAttribute('fill', pal.curl2);
+  curlSvg.appendChild(c2);
+  curl.appendChild(curlSvg);
+  card.appendChild(curl);
+
+  return card;
 }
 
-function openEdit(task,sec){
-  editTarget={task,sec};
-  document.getElementById('e-text').value=task.text;
-  document.getElementById('e-date').value=task.date||'';
-  document.getElementById('edit-ov').classList.add('show');
-  document.getElementById('e-text').focus();
-}
-function closeEdit(){editTarget=null;document.getElementById('edit-ov').classList.remove('show')}
-function saveEdit(){
-  if(!editTarget)return;
-  const txt=document.getElementById('e-text').value.trim();
-  if(txt)editTarget.task.text=txt;
-  editTarget.task.date=document.getElementById('e-date').value;
-  closeEdit();renderGrid();updateOverall();
+function buildTaskEl(nid, tid, task, pal) {
+  const li = document.createElement('li');
+  li.className = 'task-item';
+  li.dataset.tid = tid;
+
+  // checkbox
+  const checkBtn = document.createElement('button');
+  checkBtn.className = 'task-check-btn';
+  checkBtn.style.color = pal.color;
+  checkBtn.appendChild(task.done ? buildSvgChecked(pal.color) : buildSvgUnchecked(pal.color));
+  checkBtn.addEventListener('click', () => {
+    const newDone = !task.done;
+    const updated = { ...notes[nid].tasks, [tid]: {...task, done:newDone} };
+    saveNote(currentTripId, currentTab, nid, {tasks: updated});
+  });
+  li.appendChild(checkBtn);
+
+  // text wrap
+  const textWrap = document.createElement('div');
+  textWrap.className = 'task-text-wrap' + (task.done ? ' done' : '');
+  const textInput = document.createElement('textarea');
+  textInput.className = 'task-text' + (task.done ? ' done' : '');
+  textInput.value = task.text;
+  textInput.style.color = pal.color;
+  textInput.rows = 1;
+  textInput.style.resize = 'none';
+  textInput.style.overflow = 'hidden';
+  textInput.readOnly = true;
+  // auto-height
+  const autoHeight = () => {
+    textInput.style.height = 'auto';
+    textInput.style.height = textInput.scrollHeight + 'px';
+  };
+  setTimeout(autoHeight, 0);
+  textInput.addEventListener('dblclick', () => { textInput.readOnly = false; textInput.focus(); autoHeight(); });
+  textInput.addEventListener('input', autoHeight);
+  textInput.addEventListener('blur', () => {
+    textInput.readOnly = true;
+    autoHeight();
+    if (textInput.value.trim() !== task.text) {
+      const updated = { ...notes[nid].tasks, [tid]: {...task, text:textInput.value.trim()} };
+      saveNote(currentTripId, currentTab, nid, {tasks: updated});
+    }
+  });
+  textInput.addEventListener('keydown', e => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); textInput.blur(); } });
+  textWrap.appendChild(textInput);
+  li.appendChild(textWrap);
+
+  // date
+  const dateInput = document.createElement('input');
+  dateInput.type = 'date';
+  dateInput.className = 'task-date-input';
+  dateInput.value = task.date || '';
+  dateInput.title = '截止日期（可选）';
+  dateInput.style.color = pal.color;
+  dateInput.addEventListener('change', () => {
+    const updated = { ...notes[nid].tasks, [tid]: {...task, date: dateInput.value} };
+    saveNote(currentTripId, currentTab, nid, {tasks: updated});
+  });
+  li.appendChild(dateInput);
+
+  // edit btn
+  const editBtn = document.createElement('button');
+  editBtn.className = 'task-edit-btn';
+  editBtn.title = '编辑任务';
+  editBtn.style.color = pal.color;
+  editBtn.appendChild(buildSvgEdit());
+  editBtn.addEventListener('click', () => { textInput.readOnly = false; textInput.focus(); textInput.select(); textInput.style.height = 'auto'; textInput.style.height = textInput.scrollHeight + 'px'; });
+  li.appendChild(editBtn);
+
+  // del btn
+  const delBtn = document.createElement('button');
+  delBtn.className = 'task-del-btn';
+  delBtn.title = '删除任务';
+  delBtn.style.color = pal.color;
+  delBtn.appendChild(buildSvgX());
+  delBtn.addEventListener('click', () => {
+    const updated = { ...notes[nid].tasks };
+    delete updated[tid];
+    saveNote(currentTripId, currentTab, nid, {tasks: updated});
+  });
+  li.appendChild(delBtn);
+
+  return li;
 }
 
-function tick(){
-  const f=new Date('2026-06-26T01:30:00');
-  const ms=Math.max(0,f-new Date());
-  document.getElementById('cd-d').textContent=Math.floor(ms/86400000);
-  document.getElementById('cd-h').textContent=String(Math.floor(ms%86400000/3600000)).padStart(2,'0');
-  document.getElementById('cd-m').textContent=String(Math.floor(ms%3600000/60000)).padStart(2,'0');
-  document.getElementById('cd-s').textContent=String(Math.floor(ms%60000/1000)).padStart(2,'0');
+/* ─── SVG BUILDERS ─── */
+function buildSvgX() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 12 12');
+  svg.setAttribute('width','12'); svg.setAttribute('height','12');
+  svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor');
+  svg.setAttribute('stroke-width','2'); svg.setAttribute('stroke-linecap','round');
+  const l1 = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l1.setAttribute('x1','2');l1.setAttribute('y1','2');l1.setAttribute('x2','10');l1.setAttribute('y2','10');
+  const l2 = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l2.setAttribute('x1','10');l2.setAttribute('y1','2');l2.setAttribute('x2','2');l2.setAttribute('y2','10');
+  svg.appendChild(l1); svg.appendChild(l2);
+  return svg;
+}
+function buildSvgPlus() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 12 12');
+  svg.setAttribute('width','12'); svg.setAttribute('height','12');
+  svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor');
+  svg.setAttribute('stroke-width','2.2'); svg.setAttribute('stroke-linecap','round');
+  const l1 = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l1.setAttribute('x1','6');l1.setAttribute('y1','1');l1.setAttribute('x2','6');l1.setAttribute('y2','11');
+  const l2 = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l2.setAttribute('x1','1');l2.setAttribute('y1','6');l2.setAttribute('x2','11');l2.setAttribute('y2','6');
+  svg.appendChild(l1); svg.appendChild(l2);
+  return svg;
+}
+function buildSvgEdit() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 12 12');
+  svg.setAttribute('width','12'); svg.setAttribute('height','12');
+  svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor');
+  svg.setAttribute('stroke-width','1.6'); svg.setAttribute('stroke-linecap','round');
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d','M8 2l2 2-6 6H2V8l6-6z');
+  svg.appendChild(p);
+  return svg;
+}
+function buildSvgUnchecked(color) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 16 16');
+  svg.setAttribute('width','16'); svg.setAttribute('height','16');
+  const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  rect.setAttribute('x','2'); rect.setAttribute('y','2');
+  rect.setAttribute('width','12'); rect.setAttribute('height','12');
+  rect.setAttribute('rx','2.5'); rect.setAttribute('fill','none');
+  rect.setAttribute('stroke',color); rect.setAttribute('stroke-width','1.5');
+  svg.appendChild(rect);
+  return svg;
+}
+function buildSvgChecked(color) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 16 16');
+  svg.setAttribute('width','16'); svg.setAttribute('height','16');
+  const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  rect.setAttribute('x','2'); rect.setAttribute('y','2');
+  rect.setAttribute('width','12'); rect.setAttribute('height','12');
+  rect.setAttribute('rx','2.5'); rect.setAttribute('fill',color);
+  rect.setAttribute('stroke',color); rect.setAttribute('stroke-width','1.5');
+  svg.appendChild(rect);
+  const check = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+  check.setAttribute('points','5,8 7,10.5 11,6');
+  check.setAttribute('fill','none'); check.setAttribute('stroke','white');
+  check.setAttribute('stroke-width','1.8'); check.setAttribute('stroke-linecap','round');
+  svg.appendChild(check);
+  return svg;
 }
 
-function showTZ(){
-  try{
-    const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const off=-new Date().getTimezoneOffset();
-    const h=Math.floor(Math.abs(off)/60),m=Math.abs(off)%60;
-    document.getElementById('tz-badge').textContent=`${tz}  UTC${off>=0?'+':'-'}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-  }catch(e){document.getElementById('tz-badge').textContent='时区未知'}
+/* ─── PROGRESS ─── */
+function updateProgress() {
+  let total = 0, done = 0;
+  for (const note of Object.values(notes)) {
+    for (const task of Object.values(note.tasks||{})) {
+      total++; if (task.done) done++;
+    }
+  }
+  progressText.textContent = `${done} / ${total} 完成`;
+  progressBar.style.width = total > 0 ? `${Math.round(done/total*100)}%` : '0%';
 }
 
-renderGrid();showTZ();tick();setInterval(tick,1000);
+/* ─── EVENTS ─── */
+addTripBtn.addEventListener('click', () => {
+  if (Object.keys(trips).length >= 15) {
+    alert('最多创建15个行程，无法继续新增');
+    return;
+  }
+  newTripForm.classList.toggle('open');
+  if (newTripForm.classList.contains('open')) tripNameInput.focus();
+});
+cancelTripBtn.addEventListener('click', () => {
+  newTripForm.classList.remove('open');
+  tripNameInput.value = ''; tripDepartInput.value = ''; tripReturnInput.value = '';
+});
+saveTripBtn.addEventListener('click', () => {
+  console.log('🟡 saveTripBtn clicked');
+  const name = tripNameInput.value.trim();
+  console.log('🟡 name =', JSON.stringify(name));
+  if (!name) { tripNameInput.focus(); return; }
+  const id = uid();
+  console.log('🟡 calling saveTrip with id=', id);
+  saveTrip(id, {
+    name, departDate: tripDepartInput.value,
+    returnDate: tripReturnInput.value, createdAt: Date.now()
+  }).then(() => {
+    console.log('✅ saveTrip resolved');
+  }).catch(e => {
+    console.error('❌ saveTrip rejected:', e);
+  });
+  newTripForm.classList.remove('open');
+  tripNameInput.value = ''; tripDepartInput.value = ''; tripReturnInput.value = '';
+});
+
+backBtn.addEventListener('click', closeTrip);
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentTab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateCountdownLabel();
+    startCountdown();
+    subscribeNotes(currentTripId, currentTab);
+    updateCountdownIcon();
+  });
+});
+
+addNoteBtn.addEventListener('click', () => {
+  if (Object.keys(notes).length >= 15) {
+    alert('当前分组最多15张便利贴');
+    return;
+  }
+  const nid = uid();
+  const palIdx = Object.keys(notes).length % PALS.length;
+  saveNote(currentTripId, currentTab, nid, {
+    title: '便利贴', palIdx, tasks: {}, createdAt: Date.now()
+  });
+});
+
+/* ─── INIT ─── */
+async function init() {
+  try {
+    console.log('🟡 init: starting loadTrips');
+    await loadTrips();
+    console.log('🟡 init: loadTrips done, trips =', trips);
+    drawStandingIcon();
+    loadingEl.classList.add('hidden');
+    console.log('✅ App initialized, Firebase connected');
+  } catch(e) {
+    console.error('❌ Init failed:', e.code, e.message, e);
+    loadingEl.querySelector('p').textContent = `初始化失败：${e.message}`;
+  }
+}
+
+init();
 </script>
+</body>
+</html>
